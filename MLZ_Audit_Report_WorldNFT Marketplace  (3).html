@@ -1,0 +1,1358 @@
+
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLZ Audit Report - WorldNFT Marketplace </title>
+    <style>
+      :root {
+        --color-high: #FFDDDD;
+        --color-high-text: #CC0000;
+        --color-high-border: #FFAAAA;
+        --color-medium: #FFEEDD;
+        --color-medium-text: #CC6600;
+        --color-medium-border: #FFCC99;
+        --color-low: #FFFFDD;
+        --color-low-text: #999900;
+        --color-low-border: #EEEE99;
+        --color-info: #DDDDFF;
+        --color-info-text: #0000CC;
+        --color-info-border: #BBBBFF;
+        --color-primary: #8855DD;
+        --color-primary-light: #F0F0FF;
+        --color-primary-dark: #6633AA;
+        --color-text: #333333;
+        --color-text-light: #666666;
+        --color-border: #DDDDDD;
+        --color-background: #FFFFFF;
+        --color-header-bg: linear-gradient(to right, #20B2AA, #9370DB, #9932CC);
+        --color-code-bg: #F8F8F8;
+        --color-highlight: #FFFF99;
+        --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --radius-sm: 4px;
+        --radius-md: 6px;
+        --radius-lg: 8px;
+      }
+      
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      
+      body {
+        font-family: var(--font-sans);
+        line-height: 1.6;
+        color: var(--color-text);
+        background-color: #F5F5F5;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background-color: var(--color-background);
+        box-shadow: var(--shadow-md);
+      }
+      
+      .header {
+        background: var(--color-header-bg);
+        color: white;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+      }
+      
+      .header h1 {
+        margin: 0;
+        font-size: 24px;
+        margin-left: 15px;
+      }
+      
+      .logo {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .content {
+        padding: 30px;
+      }
+      
+      .report-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+      
+      .report-title {
+        margin: 0 0 5px 0;
+        font-size: 24px;
+        color: var(--color-primary);
+      }
+      
+      .report-date {
+        color: var(--color-text-light);
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      
+      .project-logo {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+      }
+      
+      .project-description {
+        background-color: var(--color-primary-light);
+        padding: 15px;
+        border-radius: var(--radius-md);
+        margin-bottom: 30px;
+        border: 1px solid var(--color-border);
+      }
+      
+      h2 {
+        color: var(--color-primary);
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .section-icon {
+        color: var(--color-primary);
+      }
+      
+      .category-reports-section {
+        margin-bottom: 30px;
+      }
+      
+      .category-reports {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+      }
+      
+      .category-report {
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 15px;
+        background-color: #F9F9F9;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      
+      .category-report:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+      
+      .category-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      
+      .category-name {
+        font-weight: bold;
+        text-transform: capitalize;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      
+      .category-icon {
+        color: var(--color-primary);
+      }
+      
+      .status-icon {
+        flex-shrink: 0;
+      }
+      
+      .status-icon.complete {
+        color: #22C55E;
+      }
+      
+      .status-icon.error {
+        color: #EF4444;
+      }
+      
+      .status-icon.pending {
+        color: #3B82F6;
+      }
+      
+      .issues-count, .error-message {
+        font-size: 13px;
+        margin-top: 5px;
+      }
+      
+      .error-message {
+        color: var(--color-high-text);
+      }
+      
+      .summary {
+        margin-bottom: 30px;
+      }
+      
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+      }
+      
+      .summary-item {
+        padding: 20px;
+        border-radius: var(--radius-md);
+        text-align: center;
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .summary-item:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+      
+      .summary-item.high {
+        background-color: var(--color-high);
+        border: 1px solid var(--color-high-border);
+      }
+      
+      .summary-item.medium {
+        background-color: var(--color-medium);
+        border: 1px solid var(--color-medium-border);
+      }
+      
+      .summary-item.low {
+        background-color: var(--color-low);
+        border: 1px solid var(--color-low-border);
+      }
+      
+      .summary-item.info {
+        background-color: var(--color-info);
+        border: 1px solid var(--color-info-border);
+      }
+      
+      .summary-icon {
+        margin-bottom: 10px;
+      }
+      
+      .summary-icon.high {
+        color: var(--color-high-text);
+      }
+      
+      .summary-icon.medium {
+        color: var(--color-medium-text);
+      }
+      
+      .summary-icon.low {
+        color: var(--color-low-text);
+      }
+      
+      .summary-icon.info {
+        color: var(--color-info-text);
+      }
+      
+      .summary-label {
+        font-weight: bold;
+        font-size: 14px;
+      }
+      
+      .summary-count {
+        font-size: 28px;
+        font-weight: bold;
+        margin-top: 5px;
+      }
+      
+      .findings-section h2 {
+        color: var(--color-primary);
+        margin-bottom: 20px;
+      }
+      
+      .finding {
+        margin-bottom: 40px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid var(--color-border);
+      }
+      
+      .finding-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        align-items: center;
+      }
+      
+      .severity-container {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      
+      .severity {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: var(--radius-sm);
+        font-size: 12px;
+        font-weight: bold;
+      }
+      
+      .severity.high {
+        background-color: var(--color-high);
+        color: var(--color-high-text);
+      }
+      
+      .severity.medium {
+        background-color: var(--color-medium);
+        color: var(--color-medium-text);
+      }
+      
+      .severity.low {
+        background-color: var(--color-low);
+        color: var(--color-low-text);
+      }
+      
+      .severity.info {
+        background-color: var(--color-info);
+        color: var(--color-info-text);
+      }
+      
+      .icon {
+        flex-shrink: 0;
+      }
+      
+      .id {
+        color: var(--color-text-light);
+        font-size: 12px;
+        font-family: var(--font-mono);
+        background-color: #F0F0F0;
+        padding: 2px 6px;
+        border-radius: var(--radius-sm);
+      }
+      
+      .title {
+        margin: 0 0 15px 0;
+        font-size: 20px;
+        color: var(--color-primary-dark);
+      }
+      
+      .description {
+        margin-bottom: 20px;
+        white-space: pre-wrap;
+        line-height: 1.6;
+      }
+      
+      .details {
+        display: grid;
+        gap: 20px;
+      }
+      
+      .detail {
+        background-color: #FAFAFA;
+        padding: 15px;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+      }
+      
+      .detail-label {
+        font-size: 12px;
+        font-weight: bold;
+        color: var(--color-text-light);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        text-transform: uppercase;
+      }
+      
+      .detail-icon {
+        color: var(--color-primary);
+      }
+      
+      .detail-value {
+        line-height: 1.6;
+      }
+      
+      .code-container {
+        background-color: var(--color-code-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        margin: 15px 0;
+        overflow: hidden;
+      }
+      
+      .code-header {
+        background-color: #E8E8E8;
+        padding: 8px 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        font-family: var(--font-mono);
+        color: var(--color-text-light);
+        border-bottom: 1px solid var(--color-border);
+      }
+      
+      .file-name {
+        font-weight: bold;
+      }
+      
+      .line-range {
+        background-color: #D8D8D8;
+        padding: 2px 6px;
+        border-radius: var(--radius-sm);
+      }
+      
+      .code-snippet {
+        padding: 10px;
+        overflow-x: auto;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      
+      .code-table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      
+      .line-number {
+        text-align: right;
+        padding: 0 10px;
+        color: #999;
+        border-right: 1px solid #DDD;
+        user-select: none;
+        width: 1%;
+        white-space: nowrap;
+      }
+      
+      .code-line {
+        padding: 0 10px;
+        white-space: pre;
+      }
+      
+      .highlighted-line {
+        background-color: var(--color-highlight);
+      }
+      
+      .highlighted-line .line-number {
+        font-weight: bold;
+        color: #666;
+      }
+      
+      .next-steps {
+        background-color: var(--color-primary-light);
+        padding: 20px;
+        border-radius: var(--radius-md);
+        margin-top: 30px;
+        border: 1px solid var(--color-border);
+      }
+      
+      .next-steps h2 {
+        color: var(--color-primary);
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+      
+      .social-links {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid var(--color-border);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+      
+      .social-link {
+        color: var(--color-primary);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 8px 12px;
+        border-radius: var(--radius-md);
+        background-color: var(--color-primary-light);
+        transition: background-color 0.2s;
+      }
+      
+      .social-link:hover {
+        background-color: #E8E0FF;
+      }
+      
+      .social-icon {
+        color: var(--color-primary);
+      }
+      
+      .source-code-section {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid var(--color-border);
+      }
+      
+      .source-files-container {
+        display: grid;
+        gap: 20px;
+      }
+      
+      .source-file {
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+      }
+      
+      .source-file-header {
+        background-color: #E8E8E8;
+        padding: 10px 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--font-mono);
+        font-size: 14px;
+        font-weight: bold;
+        border-bottom: 1px solid var(--color-border);
+      }
+      
+      .file-icon {
+        color: var(--color-primary);
+      }
+      
+      .source-file-content {
+        max-height: 400px;
+        overflow-y: auto;
+        background-color: var(--color-code-bg);
+      }
+      
+      .source-file-content pre {
+        margin: 0;
+        padding: 15px;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        line-height: 1.5;
+        white-space: pre-wrap;
+      }
+      
+      .scope-of-work-section,
+      .disclaimer-section {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid var(--color-border);
+      }
+      
+      .scope-of-work-content,
+      .disclaimer-content {
+        margin-top: 15px;
+        line-height: 1.6;
+      }
+      
+      .scope-of-work-content ul,
+      .disclaimer-content ul {
+        margin-left: 20px;
+        margin-bottom: 15px;
+      }
+      
+      .scope-of-work-content li,
+      .disclaimer-content li {
+        margin-bottom: 8px;
+      }
+      
+      .scope-of-work-content strong,
+      .disclaimer-content strong {
+        font-weight: bold;
+      }
+
+      .methodology-section {
+        margin-bottom: 30px;
+        background-color: #f8f9fa;
+        border-radius: var(--radius-md);
+        padding: 20px;
+        border: 1px solid var(--color-border);
+      }
+
+      .methodology-content {
+        margin-top: 15px;
+      }
+
+      .methodology-content h3 {
+        font-size: 16px;
+        margin-bottom: 10px;
+        color: var(--color-primary-dark);
+      }
+
+      .methodology-content ul {
+        margin-left: 20px;
+        margin-bottom: 15px;
+      }
+
+      .methodology-content li {
+        margin-bottom: 8px;
+      }
+
+      .methodology-content strong {
+        font-weight: bold;
+      }
+      
+      .footer {
+        text-align: center;
+        padding: 20px;
+        background-color: #F0F0F0;
+        color: var(--color-text-light);
+        font-size: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+      }
+      
+      .footer-logo {
+        width: 24px;
+        height: 24px;
+      }
+      
+      @media print {
+        body {
+          background-color: white;
+        }
+        
+        .container {
+          box-shadow: none;
+          max-width: 100%;
+        }
+        
+        .source-file-content {
+          max-height: none;
+        }
+      }
+      
+      @media (max-width: 768px) {
+        .content {
+          padding: 20px 15px;
+        }
+        
+        .summary-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .category-reports {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo%20%282%29-zuWTBfp90yv1KCPqRFHeJ7tTDlgsAC.png" alt="MetaLabz Logo" class="logo">
+        <h1>MLZ Audit Report</h1>
+      </header>
+      
+      <main class="content">
+        <div class="report-header">
+          <div>
+            <h2 class="report-title">WorldNFT Marketplace </h2>
+            <p class="report-date">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="date-icon"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              Generated on 3/17/2025
+            </p>
+          </div>
+          <img src="data:image/png;base64,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" alt="Project Logo" class="project-logo">
+        </div>
+        
+        
+    <div class="project-description">
+      <p>Listing contract deployed across numerous chains responsible for WorldNFT Marketplace commerce of listed NFTs </p>
+    </div>
+  
+        
+        
+<section class="methodology-section">
+  <h2>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="section-icon"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+    Audit Methodology
+  </h2>
+  <div class="methodology-content">
+    <p>This security audit was conducted using a combination of automated and manual analysis techniques to identify vulnerabilities and security issues in the provided code.</p>
+    
+    <h3>Our approach included:</h3>
+    
+    <ul>
+      <li><strong>Static Analysis:</strong> Automated scanning tools were used to identify common vulnerabilities, coding errors, and security anti-patterns.</li>
+      
+      <li><strong>Manual Code Review:</strong> Experienced security auditors performed a line-by-line review of the codebase to identify logical flaws, access control issues, and other vulnerabilities that automated tools might miss.</li>
+      
+      <li><strong>Architecture Analysis:</strong> The overall system design was evaluated for security implications, focusing on the interaction between components and potential attack vectors.</li>
+      
+      <li><strong>Gas Optimization:</strong> For smart contracts, we analyzed gas usage patterns and identified opportunities for optimization.</li>
+      
+      <li><strong>Best Practices Review:</strong> The code was evaluated against industry best practices and standards for secure development.</li>
+    </ul>
+    
+    <p><strong>Severity Classification:</strong></p>
+    <ul>
+      <li><strong>High:</strong> Vulnerabilities that can lead to asset loss, significant data compromise, or other severe impacts.</li>
+      <li><strong>Medium:</strong> Vulnerabilities that could potentially lead to asset loss under specific circumstances or represent significant flaws in the system's design.</li>
+      <li><strong>Low:</strong> Vulnerabilities that are limited in scope or require unusual circumstances to exploit.</li>
+      <li><strong>Informational:</strong> Issues that do not pose an immediate security risk but should be addressed as best practice.</li>
+    </ul>
+  </div>
+</section>
+
+        
+        
+    <div class="category-reports-section">
+      <h2>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="section-icon"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+        Analysis Components
+      </h2>
+      <div class="category-reports">
+        
+      <div class="category-report complete">
+        <div class="category-header">
+          <span class="category-name">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="category-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            smart-contract
+          </span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="status-icon complete"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
+        <div class="issues-count">Issues found: 5</div>
+        
+      </div>
+    
+      </div>
+    </div>
+  
+        
+        <section class="summary">
+          <h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="section-icon"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+            Executive Summary
+          </h2>
+          <div class="summary-grid">
+            <div class="summary-item high">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="summary-icon high"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              <div class="summary-label">High</div>
+              <div class="summary-count">1</div>
+            </div>
+            <div class="summary-item medium">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="summary-icon medium"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              <div class="summary-label">Medium</div>
+              <div class="summary-count">2</div>
+            </div>
+            <div class="summary-item low">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="summary-icon low"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+              <div class="summary-label">Low</div>
+              <div class="summary-count">1</div>
+            </div>
+            <div class="summary-item info">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="summary-icon info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              <div class="summary-label">Info</div>
+              <div class="summary-count">1</div>
+            </div>
+          </div>
+        </section>
+        
+        <section class="findings-section">
+          <h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="section-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            Key Findings
+          </h2>
+          
+    <div class="finding high">
+      <div class="finding-header">
+        <div class="severity-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span class="severity high">High</span>
+        </div>
+        <span class="id">H-01</span>
+      </div>
+      <h3 class="title">Reentrancy Vulnerability</h3>
+      <div class="description">The `buyNFT` function is vulnerable to reentrancy attacks. The contract transfers Ether to the seller before updating the listing state, which could allow an attacker to repeatedly call the `buyNFT` function before the state is updated, draining the contract's funds.</div>
+      
+      <div class="details">
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            LOCATION
+          </div>
+          <div class="detail-value">NFTListingManager.sol:159-178</div>
+        </div>
+        
+        
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            IMPACT
+          </div>
+          <div class="detail-value">An attacker could repeatedly call the `buyNFT` function to drain the contract's funds.</div>
+        </div>
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            RECOMMENDATION
+          </div>
+          <div class="detail-value">Implement the Checks-Effects-Interactions pattern to prevent reentrancy attacks. Update the listing state before transferring Ether to the seller.</div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="finding medium">
+      <div class="finding-header">
+        <div class="severity-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <span class="severity medium">Medium</span>
+        </div>
+        <span class="id">M-01</span>
+      </div>
+      <h3 class="title">Lack of Input Validation</h3>
+      <div class="description">The `listNFTBatch` function does not perform sufficient input validation. It assumes that the lengths of the input arrays are equal, which could lead to unexpected behavior if the lengths are not matched.</div>
+      
+      <div class="details">
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            LOCATION
+          </div>
+          <div class="detail-value">NFTListingManager.sol:122-134</div>
+        </div>
+        
+        
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            IMPACT
+          </div>
+          <div class="detail-value">Incorrect input data could lead to unexpected behavior or even revert the transaction.</div>
+        </div>
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            RECOMMENDATION
+          </div>
+          <div class="detail-value">Add explicit checks to ensure that the lengths of the input arrays are equal before processing the batch listing.</div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="finding medium">
+      <div class="finding-header">
+        <div class="severity-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <span class="severity medium">Medium</span>
+        </div>
+        <span class="id">M-02</span>
+      </div>
+      <h3 class="title">Potential Integer Overflow/Underflow</h3>
+      <div class="description">The contract uses unchecked arithmetic operations, which could lead to integer overflow/underflow vulnerabilities. For example, the `platformFee` calculation in the `buyNFT` function could potentially overflow or underflow, leading to incorrect fee calculations.</div>
+      
+      <div class="details">
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            LOCATION
+          </div>
+          <div class="detail-value">NFTListingManager.sol:167-168</div>
+        </div>
+        
+        
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            IMPACT
+          </div>
+          <div class="detail-value">Incorrect fee calculations could lead to financial losses for the platform or the users.</div>
+        </div>
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            RECOMMENDATION
+          </div>
+          <div class="detail-value">Use OpenZeppelin's SafeMath library or equivalent to perform all arithmetic operations in a safe manner, preventing integer overflow/underflow vulnerabilities.</div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="finding low">
+      <div class="finding-header">
+        <div class="severity-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="icon"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          <span class="severity low">Low</span>
+        </div>
+        <span class="id">L-01</span>
+      </div>
+      <h3 class="title">Lack of Timestamp Dependency Mitigation</h3>
+      <div class="description">The contract uses block.timestamp to determine the start and end times of listings, which could be manipulated by miners. This could allow attackers to exploit the time-based conditions in the contract.</div>
+      
+      <div class="details">
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            LOCATION
+          </div>
+          <div class="detail-value">NFTListingManager.sol:141-142, 160-161</div>
+        </div>
+        
+        
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            IMPACT
+          </div>
+          <div class="detail-value">Attackers could potentially manipulate the listing start and end times to their advantage.</div>
+        </div>
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            RECOMMENDATION
+          </div>
+          <div class="detail-value">Consider using an external oracle or a more reliable time source to determine the start and end times of listings, or implement additional checks to mitigate the risk of timestamp manipulation.</div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="finding info">
+      <div class="finding-header">
+        <div class="severity-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span class="severity info">Informational</span>
+        </div>
+        <span class="id">I-01</span>
+      </div>
+      <h3 class="title">Gas Optimization Opportunity</h3>
+      <div class="description">The `getActiveListingsByWallet` function could be optimized to reduce gas consumption. The current implementation iterates through all the user's listed NFT contracts and tokens, which could be expensive for users with a large number of listings.</div>
+      
+      <div class="details">
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            LOCATION
+          </div>
+          <div class="detail-value">NFTListingManager.sol:280-315</div>
+        </div>
+        
+        
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            IMPACT
+          </div>
+          <div class="detail-value">High gas costs for users with a large number of listings.</div>
+        </div>
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            RECOMMENDATION
+          </div>
+          <div class="detail-value">Consider optimizing the function by using a more efficient data structure or algorithm to retrieve the user's active listings.</div>
+        </div>
+      </div>
+    </div>
+  
+        </section>
+        
+        <section class="next-steps">
+          <h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="section-icon"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            Next Steps
+          </h2>
+          <p>This audit report identifies several security issues that should be addressed before deployment to production. We recommend fixing all high and medium severity issues and conducting a follow-up audit to verify the remediation.</p>
+        </section>
+        
+        
+    <div class="source-code-section">
+      <h2>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="section-icon"><path d="M16 18l6-6-6-6"></path><path d="M8 6l-6 6 6 6"></path></svg>
+        Source Code
+      </h2>
+      <div class="source-files-container">
+        
+      <div class="source-file">
+        <div class="source-file-header">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="file-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          <span class="source-file-name">NFT_listing_manager.txt</span>
+        </div>
+        <div class="source-file-content">
+          <pre><code>// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.21;
+
+import &quot;@openzeppelin/contracts/token/ERC721/IERC721.sol&quot;;
+import &quot;@openzeppelin/contracts/interfaces/IERC2981.sol&quot;;
+import &quot;@openzeppelin/contracts/security/ReentrancyGuard.sol&quot;;
+import &quot;@openzeppelin/contracts/utils/structs/EnumerableSet.sol&quot;;
+import &quot;@openzeppelin/contracts/security/Pausable.sol&quot;;
+import &quot;@openzeppelin/contracts/access/Ownable.sol&quot;;
+
+contract NFTListingManager is ReentrancyGuard, Pausable, Ownable {
+    using EnumerableSet for EnumerableSet.AddressSet;
+    using EnumerableSet for EnumerableSet.UintSet;
+
+    struct Listing {
+        address seller;
+        address nftContract;
+        uint256 tokenId;
+        uint256 price;
+        uint256 startTime;
+        uint256 endTime;
+    }
+
+    mapping(address =&gt; mapping(uint256 =&gt; Listing)) public listings;
+    // Track active listings per NFT contract
+    mapping(address =&gt; EnumerableSet.UintSet) private activeListings;
+    EnumerableSet.AddressSet private activeNFTContracts;
+    // Track active listings per user wallet
+    mapping(address =&gt; EnumerableSet.UintSet) private userListingTokenIds;
+    mapping(address =&gt; EnumerableSet.AddressSet) private userListingContracts;
+    
+    address public platformFeeRecipient;
+    uint256 public platformFeePercent = 5;
+
+    event Listed(address indexed seller, address indexed nftContract, uint256 indexed tokenId, uint256 price, uint256 startTime, uint256 endTime);
+    event PriceUpdated(address indexed seller, address indexed nftContract, uint256 indexed tokenId, uint256 newPrice);
+    event Canceled(address indexed seller, address indexed nftContract, uint256 indexed tokenId);
+    event Sold(address indexed buyer, address indexed nftContract, uint256 indexed tokenId, uint256 price, uint256 platformFee, uint256 creatorFee);
+    event PlatformFeeUpdated(uint256 newFeePercent);
+    event ExpiredListingRemoved(address indexed nftContract, uint256 indexed tokenId);
+
+    constructor(address _platformFeeRecipient) Ownable(msg.sender) {
+        platformFeeRecipient = _platformFeeRecipient;
+    }
+
+    modifier onlySeller(address nftContract, uint256 tokenId) {
+        require(listings[nftContract][tokenId].seller == msg.sender, &quot;You are not the seller&quot;);
+        _;
+    }
+
+    function setPlatformFeePercent(uint256 _newFee) external onlyOwner {
+        require(_newFee &lt;= 100, &quot;Fee too high&quot;);
+        platformFeePercent = _newFee;
+        emit PlatformFeeUpdated(_newFee);
+    }
+
+    function listNFT(address nftContract, uint256 tokenId, uint256 price, uint256 startTime, uint256 endTime) public nonReentrant whenNotPaused {
+        require(startTime &lt; endTime, &quot;Invalid time range&quot;);
+        require(IERC721(nftContract).ownerOf(tokenId) == msg.sender, &quot;Not the owner&quot;);
+        require(IERC721(nftContract).isApprovedForAll(msg.sender, address(this)), &quot;Contract not approved&quot;);
+
+        listings[nftContract][tokenId] = Listing(msg.sender, nftContract, tokenId, price, startTime, endTime);
+        activeNFTContracts.add(nftContract);
+        activeListings[nftContract].add(tokenId);
+        
+        // Track user&#039;s listings
+        userListingTokenIds[msg.sender].add(tokenId);
+        userListingContracts[msg.sender].add(nftContract);
+
+        emit Listed(msg.sender, nftContract, tokenId, price, startTime, endTime);
+    }
+
+    function listNFTBatch(
+        address[] calldata nftContracts, 
+        uint256[] calldata tokenIds, 
+        uint256[] calldata prices, 
+        uint256[] calldata startTimes, 
+        uint256[] calldata endTimes
+    ) external nonReentrant whenNotPaused {
+        require(
+            nftContracts.length == tokenIds.length &amp;&amp; 
+            tokenIds.length == prices.length &amp;&amp; 
+            prices.length == startTimes.length &amp;&amp; 
+            startTimes.length == endTimes.length, 
+            &quot;Array lengths mismatch&quot;
+        );
+
+        for (uint256 i = 0; i &lt; nftContracts.length; i++) {
+            listNFT(nftContracts[i], tokenIds[i], prices[i], startTimes[i], endTimes[i]);
+        }
+    }
+
+    function cancelListing(address nftContract, uint256 tokenId) external nonReentrant onlySeller(nftContract, tokenId) {
+        require(activeListings[nftContract].contains(tokenId), &quot;Listing not active&quot;);
+        
+        // Clean up user&#039;s listings tracking
+        userListingTokenIds[msg.sender].remove(tokenId);
+        if (userListingTokenIds[msg.sender].length() == 0) {
+            userListingContracts[msg.sender].remove(nftContract);
+        }
+
+        delete listings[nftContract][tokenId];
+        activeListings[nftContract].remove(tokenId);
+        
+        // Remove the NFT contract from activeNFTContracts if it has no more listings
+        if (activeListings[nftContract].length() == 0) {
+            activeNFTContracts.remove(nftContract);
+        }
+        
+        emit Canceled(msg.sender, nftContract, tokenId);
+    }
+
+    function buyNFT(address nftContract, uint256 tokenId) public payable nonReentrant whenNotPaused {
+        Listing memory listing = listings[nftContract][tokenId];
+        require(block.timestamp &gt;= listing.startTime, &quot;Sale not started&quot;);
+        require(block.timestamp &lt;= listing.endTime, &quot;Sale ended&quot;);
+        require(msg.value &gt;= listing.price, &quot;Insufficient payment&quot;);
+
+        uint256 platformFee = (msg.value * platformFeePercent) / 100;
+        uint256 creatorFee = 0;
+
+        if (IERC165(nftContract).supportsInterface(type(IERC2981).interfaceId)) {
+            (address creator, uint256 royaltyAmount) = IERC2981(nftContract).royaltyInfo(tokenId, msg.value);
+            creatorFee = royaltyAmount;
+            payable(creator).transfer(royaltyAmount);
+        }
+
+        uint256 sellerAmount = msg.value - platformFee - creatorFee;
+        payable(platformFeeRecipient).transfer(platformFee);
+        payable(listing.seller).transfer(sellerAmount);
+
+        IERC721(nftContract).safeTransferFrom(listing.seller, msg.sender, tokenId);
+        
+        // Clean up the listing
+        activeListings[nftContract].remove(tokenId);
+        userListingTokenIds[listing.seller].remove(tokenId);
+        if (userListingTokenIds[listing.seller].length() == 0) {
+            userListingContracts[listing.seller].remove(nftContract);
+        }
+        delete listings[nftContract][tokenId];
+        
+        // Remove the NFT contract if it has no more listings
+        if (activeListings[nftContract].length() == 0) {
+            activeNFTContracts.remove(nftContract);
+        }
+
+        emit Sold(msg.sender, nftContract, tokenId, msg.value, platformFee, creatorFee);
+    }
+
+    function buyNFTBatch(
+        address[] calldata nftContracts, 
+        uint256[] calldata tokenIds
+    ) external payable nonReentrant whenNotPaused {
+        require(nftContracts.length == tokenIds.length, &quot;Array lengths mismatch&quot;);
+
+        uint256 totalCost;
+        for (uint256 i = 0; i &lt; nftContracts.length; i++) {
+            Listing memory listing = listings[nftContracts[i]][tokenIds[i]];
+            require(block.timestamp &gt;= listing.startTime, &quot;Sale not started&quot;);
+            require(block.timestamp &lt;= listing.endTime, &quot;Sale ended&quot;);
+            totalCost += listing.price;
+        }
+        
+        require(msg.value &gt;= totalCost, &quot;Insufficient total payment&quot;);
+
+        for (uint256 i = 0; i &lt; nftContracts.length; i++) {
+            buyNFT(nftContracts[i], tokenIds[i]);
+        }
+    }
+
+    function removeExpiredListing(address nftContract, uint256 tokenId) external nonReentrant {
+        Listing memory listing = listings[nftContract][tokenId];
+        require(block.timestamp &gt; listing.endTime, &quot;Listing not expired&quot;);
+
+        activeListings[nftContract].remove(tokenId);
+        userListingTokenIds[listing.seller].remove(tokenId);
+        if (userListingTokenIds[listing.seller].length() == 0) {
+            userListingContracts[listing.seller].remove(nftContract);
+        }
+        delete listings[nftContract][tokenId];
+        
+        if (activeListings[nftContract].length() == 0) {
+            activeNFTContracts.remove(nftContract);
+        }
+        
+        emit ExpiredListingRemoved(nftContract, tokenId);
+    }
+
+    function getActiveNFTContracts() external view returns (address[] memory) {
+        uint256 length = activeNFTContracts.length();
+        address[] memory contracts = new address[](length);
+        
+        for (uint256 i = 0; i &lt; length; i++) {
+            contracts[i] = activeNFTContracts.at(i);
+        }
+        
+        return contracts;
+    }
+
+    function getActiveListingsForContract(address nftContract) external view returns (Listing[] memory) {
+        uint256 length = activeListings[nftContract].length();
+        Listing[] memory activeNFTs = new Listing[](length);
+        
+        for (uint256 i = 0; i &lt; length; i++) {
+            uint256 tokenId = activeListings[nftContract].at(i);
+            activeNFTs[i] = listings[nftContract][tokenId];
+        }
+        
+        return activeNFTs;
+    }
+
+    function getListingsByWallet(address wallet) external view returns (Listing[] memory) {
+        uint256 totalListings = 0;
+        address[] memory nftContracts = new address[](userListingContracts[wallet].length());
+        
+        // Get all NFT contracts for this wallet
+        for (uint256 i = 0; i &lt; userListingContracts[wallet].length(); i++) {
+            nftContracts[i] = userListingContracts[wallet].at(i);
+            totalListings += userListingTokenIds[wallet].length();
+        }
+        
+        Listing[] memory userListings = new Listing[](totalListings);
+        uint256 currentIndex = 0;
+        
+        // Iterate through each NFT contract and get the listings
+        for (uint256 i = 0; i &lt; nftContracts.length; i++) {
+            for (uint256 j = 0; j &lt; userListingTokenIds[wallet].length(); j++) {
+                uint256 currentTokenId = userListingTokenIds[wallet].at(j);
+                if (listings[nftContracts[i]][currentTokenId].seller == wallet) {
+                    userListings[currentIndex] = listings[nftContracts[i]][currentTokenId];
+                    currentIndex++;
+                }
+            }
+        }
+        
+        return userListings;
+    }
+
+    function getActiveListingsByWallet(address wallet) external view returns (Listing[] memory) {
+        uint256 totalListings = 0;
+        address[] memory nftContracts = new address[](userListingContracts[wallet].length());
+        
+        // Get all NFT contracts for this wallet and count active listings
+        for (uint256 i = 0; i &lt; userListingContracts[wallet].length(); i++) {
+            nftContracts[i] = userListingContracts[wallet].at(i);
+            for (uint256 j = 0; j &lt; userListingTokenIds[wallet].length(); j++) {
+                uint256 currentTokenId = userListingTokenIds[wallet].at(j);
+                if (listings[nftContracts[i]][currentTokenId].seller == wallet &amp;&amp;
+                    block.timestamp &gt;= listings[nftContracts[i]][currentTokenId].startTime &amp;&amp;
+                    block.timestamp &lt;= listings[nftContracts[i]][currentTokenId].endTime) {
+                    totalListings++;
+                }
+            }
+        }
+        
+        Listing[] memory activeUserListings = new Listing[](totalListings);
+        uint256 currentIndex = 0;
+        
+        // Iterate through each NFT contract and get only active listings
+        for (uint256 i = 0; i &lt; nftContracts.length; i++) {
+            for (uint256 j = 0; j &lt; userListingTokenIds[wallet].length(); j++) {
+                uint256 currentTokenId = userListingTokenIds[wallet].at(j);
+                Listing memory listing = listings[nftContracts[i]][currentTokenId];
+                if (listing.seller == wallet &amp;&amp;
+                    block.timestamp &gt;= listing.startTime &amp;&amp;
+                    block.timestamp &lt;= listing.endTime) {
+                    activeUserListings[currentIndex] = listing;
+                    currentIndex++;
+                }
+            }
+        }
+        
+        return activeUserListings;
+    }
+
+    function getActiveListing(address nftContract, uint256 tokenId) external view returns (Listing memory) {
+        require(activeListings[nftContract].contains(tokenId), &quot;Listing not active&quot;);
+        return listings[nftContract][tokenId];
+    }
+
+    function pause() external onlyOwner {
+        _pause();
+    }
+
+    function unpause() external onlyOwner {
+        _unpause();
+    }
+}</code></pre>
+        </div>
+      </div>
+    
+      </div>
+    </div>
+  
+        
+        
+    <div class="social-links">
+      <a href="https://WorldNFTMarketplace.com" target="_blank" rel="noopener noreferrer" class="social-link website">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="social-icon"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+      Website
+    </a>
+    </div>
+  
+        
+        
+<section class="scope-of-work-section">
+  <h2>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="section-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+    Scope of Work
+  </h2>
+  <div class="scope-of-work-content">
+    <p>This security audit covered the following areas:</p>
+    
+    <ul>
+      <li><strong>Code Review:</strong> A comprehensive review of the provided source code to identify security vulnerabilities, logic errors, and potential exploits.</li>
+      
+      <li><strong>Architecture Analysis:</strong> Evaluation of the overall system architecture, focusing on security implications and potential weaknesses.</li>
+      
+      <li><strong>Best Practices:</strong> Assessment of adherence to industry best practices and coding standards.</li>
+      
+      <li><strong>Gas Optimization:</strong> For smart contracts, analysis of gas usage and recommendations for optimization.</li>
+      
+      <li><strong>Testing Coverage:</strong> Review of the test suite to ensure adequate coverage of critical functionality.</li>
+    </ul>
+    
+    <p><strong>Files Analyzed:</strong> The audit covered 1 files, including all source code provided for review.</p>
+    
+    <p><strong>Audit Period:</strong> This audit was conducted on 3/17/2025.</p>
+  </div>
+</section>
+
+        
+        
+<section class="disclaimer-section">
+  <h2>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="section-icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+    Disclaimer
+  </h2>
+  <div class="disclaimer-content">
+    <p>This audit report is provided on an "as is" basis and is subject to the following limitations and disclaimers:</p>
+    
+    <ul>
+      <li><strong>Scope Limitations:</strong> This security audit is limited to the code and documentation provided to us at the time of the audit. Any subsequent changes to the codebase are not covered by this report.</li>
+      
+      <li><strong>No Guarantee of Complete Security:</strong> While we have made every effort to identify vulnerabilities and security issues, no audit can guarantee the complete absence of security vulnerabilities. New attack vectors and techniques may emerge after the audit is completed.</li>
+      
+      <li><strong>Smart Contract Risks:</strong> Smart contracts are subject to various risks, including but not limited to bugs, vulnerabilities, and exploits. Users should exercise caution and conduct their own due diligence before interacting with any smart contract.</li>
+      
+      <li><strong>Deployment Verification:</strong> This audit does not verify the correct deployment of the audited contracts. Users should independently verify that the deployed contract code matches the audited code before interacting with it.</li>
+      
+      <li><strong>No Investment Advice:</strong> This audit report does not constitute investment advice, an endorsement of the project, or a guarantee of the project's success or security.</li>
+    </ul>
+    
+    <p><strong>Verification of Deployed Addresses:</strong> Users should always verify that they are interacting with the correct contract addresses by checking official project documentation and communication channels. The contract addresses should be verified on the blockchain explorer to ensure they match the audited code.</p>
+    
+  </div>
+</section>
+
+      </main>
+      
+      <footer class="footer">
+        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo%20%282%29-zuWTBfp90yv1KCPqRFHeJ7tTDlgsAC.png" alt="MetaLabz Logo" class="footer-logo">
+        <p>© 2025 MetaLabz | MLZ Audit Suite</p>
+      </footer>
+    </div>
+  </body>
+  </html>
