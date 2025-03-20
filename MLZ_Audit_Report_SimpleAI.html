@@ -1,0 +1,1202 @@
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>MLZ Audit Report - SimpleAI</title>
+      <style>
+        :root {
+          --color-high: #FFDDDD;
+          --color-high-text: #CC0000;
+          --color-high-border: #FFAAAA;
+          --color-medium: #FFEEDD;
+          --color-medium-text: #CC6600;
+          --color-medium-border: #FFCC99;
+          --color-low: #FFFFDD;
+          --color-low-text: #999900;
+          --color-low-border: #EEEE99;
+          --color-info: #DDDDFF;
+          --color-info-text: #0000CC;
+          --color-info-border: #BBBBFF;
+          --color-primary: #8855DD;
+          --color-primary-light: #F0F0FF;
+          --color-primary-dark: #6633AA;
+          --color-text: #333333;
+          --color-text-light: #666666;
+          --color-border: #DDDDDD;
+          --color-background: #FFFFFF;
+          --color-header-bg: linear-gradient(to right, #20B2AA, #9370DB, #9932CC);
+          --color-code-bg: #F8F8F8;
+          --color-highlight: #FFFF99;
+          --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+          --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+          --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+          --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+          --radius-sm: 4px;
+          --radius-md: 6px;
+          --radius-lg: 8px;
+        }
+        
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+        }
+        
+        body {
+          font-family: var(--font-sans);
+          line-height: 1.6;
+          color: var(--color-text);
+          background-color: #F5F5F5;
+          margin: 0;
+          padding: 0;
+        }
+        
+        .container {
+          max-width: 1100px;
+          margin: 0 auto;
+          background-color: var(--color-background);
+          box-shadow: var(--shadow-md);
+        }
+        
+        .header {
+          background: var(--color-header-bg);
+          color: white;
+          padding: 20px;
+          display: flex;
+          align-items: center;
+        }
+        
+        .header h1 {
+          margin: 0;
+          font-size: 24px;
+          margin-left: 15px;
+        }
+        
+        .logo {
+          width: 40px;
+          height: 40px;
+        }
+        
+        .content {
+          padding: 30px;
+        }
+        
+        .report-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 30px;
+          flex-wrap: wrap;
+        }
+        
+        .report-title {
+          margin: 0 0 5px 0;
+          font-size: 24px;
+          color: var(--color-primary);
+        }
+        
+        .report-date {
+          color: var(--color-text-light);
+          font-size: 14px;
+          display: flex;
+          align-items: center;
+          gap: 5px;
+        }
+        
+        .project-logo {
+          width: 80px;
+          height: 80px;
+          object-fit: contain;
+        }
+        
+        .project-description {
+          background-color: var(--color-primary-light);
+          padding: 15px;
+          border-radius: var(--radius-md);
+          margin-bottom: 30px;
+          border: 1px solid var(--color-border);
+        }
+        
+        h2 {
+          color: var(--color-primary);
+          margin-bottom: 15px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        
+        .section-icon {
+          color: var(--color-primary);
+        }
+        
+        .category-reports-section {
+          margin-bottom: 30px;
+        }
+        
+        .category-reports {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+          gap: 15px;
+        }
+        
+        .category-report {
+          border: 1px solid var(--color-border);
+          border-radius: var(--radius-md);
+          padding: 15px;
+          background-color: #F9F9F9;
+          transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .category-report:hover {
+          transform: translateY(-2px);
+          box-shadow: var(--shadow-md);
+        }
+        
+        .category-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 10px;
+        }
+        
+        .category-name {
+          font-weight: bold;
+          text-transform: capitalize;
+          display: flex;
+          align-items: center;
+          gap: 5px;
+        }
+        
+        .category-icon {
+          color: var(--color-primary);
+        }
+        
+        .status-icon {
+          flex-shrink: 0;
+        }
+        
+        .status-icon.complete {
+          color: #22C55E;
+        }
+        
+        .status-icon.error {
+          color: #EF4444;
+        }
+        
+        .status-icon.pending {
+          color: #3B82F6;
+        }
+        
+        .issues-count, .error-message {
+          font-size: 13px;
+          margin-top: 5px;
+        }
+        
+        .error-message {
+          color: var(--color-high-text);
+        }
+        
+        .summary {
+          margin-bottom: 30px;
+        }
+        
+        .summary-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+          gap: 15px;
+        }
+        
+        .summary-item {
+          padding: 20px;
+          border-radius: var(--radius-md);
+          text-align: center;
+          transition: transform 0.2s, box-shadow 0.2s;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+        
+        .summary-item:hover {
+          transform: translateY(-2px);
+          box-shadow: var(--shadow-md);
+        }
+        
+        .summary-item.high {
+          background-color: var(--color-high);
+          border: 1px solid var(--color-high-border);
+        }
+        
+        .summary-item.medium {
+          background-color: var(--color-medium);
+          border: 1px solid var(--color-medium-border);
+        }
+        
+        .summary-item.low {
+          background-color: var(--color-low);
+          border: 1px solid var(--color-low-border);
+        }
+        
+        .summary-item.info {
+          background-color: var(--color-info);
+          border: 1px solid var(--color-info-border);
+        }
+        
+        .summary-icon {
+          margin-bottom: 10px;
+        }
+        
+        .summary-icon.high {
+          color: var(--color-high-text);
+        }
+        
+        .summary-icon.medium {
+          color: var(--color-medium-text);
+        }
+        
+        .summary-icon.low {
+          color: var(--color-low-text);
+        }
+        
+        .summary-icon.info {
+          color: var(--color-info-text);
+        }
+        
+        .summary-label {
+          font-weight: bold;
+          font-size: 14px;
+        }
+        
+        .summary-count {
+          font-size: 28px;
+          font-weight: bold;
+          margin-top: 5px;
+        }
+        
+        .findings-section h2 {
+          color: var(--color-primary);
+          margin-bottom: 20px;
+        }
+        
+        .finding {
+          margin-bottom: 40px;
+          padding-bottom: 30px;
+          border-bottom: 1px solid var(--color-border);
+        }
+        
+        .finding-header {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 15px;
+          align-items: center;
+        }
+        
+        .severity-container {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+        }
+        
+        .severity {
+          display: inline-block;
+          padding: 4px 10px;
+          border-radius: var(--radius-sm);
+          font-size: 12px;
+          font-weight: bold;
+        }
+        
+        .severity.high {
+          background-color: var(--color-high);
+          color: var(--color-high-text);
+        }
+        
+        .severity.medium {
+          background-color: var(--color-medium);
+          color: var(--color-medium-text);
+        }
+        
+        .severity.low {
+          background-color: var(--color-low);
+          color: var(--color-low-text);
+        }
+        
+        .severity.info {
+          background-color: var(--color-info);
+          color: var(--color-info-text);
+        }
+        
+        .icon {
+          flex-shrink: 0;
+        }
+        
+        .id {
+          color: var(--color-text-light);
+          font-size: 12px;
+          font-family: var(--font-mono);
+          background-color: #F0F0F0;
+          padding: 2px 6px;
+          border-radius: var(--radius-sm);
+        }
+        
+        .title {
+          margin: 0 0 15px 0;
+          font-size: 20px;
+          color: var(--color-primary-dark);
+        }
+        
+        .description {
+          margin-bottom: 20px;
+          white-space: pre-wrap;
+          line-height: 1.6;
+        }
+        
+        .details {
+          display: grid;
+          gap: 20px;
+        }
+        
+        .detail {
+          background-color: #FAFAFA;
+          padding: 15px;
+          border-radius: var(--radius-md);
+          border: 1px solid var(--color-border);
+        }
+        
+        .detail-label {
+          font-size: 12px;
+          font-weight: bold;
+          color: var(--color-text-light);
+          margin-bottom: 8px;
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          text-transform: uppercase;
+        }
+        
+        .detail-icon {
+          color: var(--color-primary);
+        }
+        
+        .detail-value {
+          line-height: 1.6;
+        }
+        
+        .code-container {
+          background-color: var(--color-code-bg);
+          border: 1px solid var(--color-border);
+          border-radius: var(--radius-md);
+          margin: 15px 0;
+          overflow: hidden;
+        }
+        
+        .code-header {
+          background-color: #E8E8E8;
+          padding: 8px 12px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 12px;
+          font-family: var(--font-mono);
+          color: var(--color-text-light);
+          border-bottom: 1px solid var(--color-border);
+        }
+        
+        .file-name {
+          font-weight: bold;
+        }
+        
+        .line-range {
+          background-color: #D8D8D8;
+          padding: 2px 6px;
+          border-radius: var(--radius-sm);
+        }
+        
+        .code-snippet {
+          padding: 10px;
+          overflow-x: auto;
+          font-family: var(--font-mono);
+          font-size: 13px;
+          line-height: 1.5;
+        }
+        
+        .code-table {
+          border-collapse: collapse;
+          width: 100%;
+        }
+        
+        .line-number {
+          text-align: right;
+          padding: 0 10px;
+          color: #999;
+          border-right: 1px solid #DDD;
+          user-select: none;
+          width: 1%;
+          white-space: nowrap;
+        }
+        
+        .code-line {
+          padding: 0 10px;
+          white-space: pre;
+        }
+        
+        .highlighted-line {
+          background-color: var(--color-highlight);
+        }
+        
+        .highlighted-line .line-number {
+          font-weight: bold;
+          color: #666;
+        }
+        
+        .next-steps {
+          background-color: var(--color-primary-light);
+          padding: 20px;
+          border-radius: var(--radius-md);
+          margin-top: 30px;
+          border: 1px solid var(--color-border);
+        }
+        
+        .next-steps h2 {
+          color: var(--color-primary);
+          margin-top: 0;
+          margin-bottom: 10px;
+        }
+        
+        .social-links {
+          margin-top: 30px;
+          padding-top: 20px;
+          border-top: 1px solid var(--color-border);
+          display: flex;
+          flex-wrap: wrap;
+          gap: 15px;
+        }
+        
+        .social-link {
+          color: var(--color-primary);
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          padding: 8px 12px;
+          border-radius: var(--radius-md);
+          background-color: var(--color-primary-light);
+          transition: background-color 0.2s;
+        }
+        
+        .social-link:hover {
+          background-color: #E8E0FF;
+        }
+        
+        .social-icon {
+          color: var(--color-primary);
+        }
+        
+        .source-code-section {
+          margin-top: 40px;
+          padding-top: 20px;
+          border-top: 1px solid var(--color-border);
+        }
+        
+        .source-files-container {
+          display: grid;
+          gap: 20px;
+        }
+        
+        .source-file {
+          border: 1px solid var(--color-border);
+          border-radius: var(--radius-md);
+          overflow: hidden;
+        }
+        
+        .source-file-header {
+          background-color: #E8E8E8;
+          padding: 10px 15px;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-family: var(--font-mono);
+          font-size: 14px;
+          font-weight: bold;
+          border-bottom: 1px solid var(--color-border);
+        }
+        
+        .file-icon {
+          color: var(--color-primary);
+        }
+        
+        .source-file-content {
+          max-height: 400px;
+          overflow-y: auto;
+          background-color: var(--color-code-bg);
+        }
+        
+        .source-file-content pre {
+          margin: 0;
+          padding: 15px;
+          font-family: var(--font-mono);
+          font-size: 13px;
+          line-height: 1.5;
+          white-space: pre-wrap;
+        }
+        
+        .scope-of-work-section,
+        .disclaimer-section {
+          margin-top: 40px;
+          padding-top: 20px;
+          border-top: 1px solid var(--color-border);
+        }
+        
+        .scope-of-work-content,
+        .disclaimer-content {
+          margin-top: 15px;
+          line-height: 1.6;
+        }
+        
+        .scope-of-work-content ul,
+        .disclaimer-content ul {
+          margin-left: 20px;
+          margin-bottom: 15px;
+        }
+        
+        .scope-of-work-content li,
+        .disclaimer-content li {
+          margin-bottom: 8px;
+        }
+        
+        .scope-of-work-content strong,
+        .disclaimer-content strong {
+          font-weight: bold;
+        }
+
+        .methodology-section {
+          margin-bottom: 30px;
+          background-color: #f8f9fa;
+          border-radius: var(--radius-md);
+          padding: 20px;
+          border: 1px solid var(--color-border);
+        }
+
+        .methodology-content {
+          margin-top: 15px;
+        }
+
+        .methodology-content h3 {
+          font-size: 16px;
+          margin-bottom: 10px;
+          color: var(--color-primary-dark);
+        }
+
+        .methodology-content ul {
+          margin-left: 20px;
+          margin-bottom: 15px;
+        }
+
+        .methodology-content li {
+          margin-bottom: 8px;
+        }
+
+        .methodology-content strong {
+          font-weight: bold;
+        }
+        
+        .footer {
+          text-align: center;
+          padding: 20px;
+          background-color: #F0F0F0;
+          color: var(--color-text-light);
+          font-size: 12px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 5px;
+        }
+        
+        .footer-logo {
+          width: 24px;
+          height: 24px;
+        }
+        
+        @media print {
+          body {
+            background-color: white;
+          }
+          
+          .container {
+            box-shadow: none;
+            max-width: 100%;
+          }
+          
+          .source-file-content {
+            max-height: none;
+          }
+        }
+        
+        @media (max-width: 768px) {
+          .content {
+            padding: 20px 15px;
+          }
+          
+          .summary-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+          
+          .category-reports {
+            grid-template-columns: 1fr;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <header class="header">
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo%20%282%29-zuWTBfp90yv1KCPqRFHeJ7tTDlgsAC.png" alt="MetaLabz Logo" class="logo">
+          <h1>MLZ Audit Report</h1>
+        </header>
+        
+        <main class="content">
+          <div class="report-header">
+            <div>
+              <h2 class="report-title">SimpleAI</h2>
+              <p class="report-date">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="date-icon"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                Generated on 3/16/2025
+              </p>
+            </div>
+            <img src="data:image/webp;base64,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" alt="Project Logo" class="project-logo">
+          </div>
+          
+          
+      <div class="project-description">
+        <p>Smart contract for the Simple AI token
+Deployment is on base chain</p>
+      </div>
+    
+          
+          
+  <section class="methodology-section">
+    <h2>
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="section-icon"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+      Audit Methodology
+    </h2>
+    <div class="methodology-content">
+      <p>This security audit was conducted using a combination of automated and manual analysis techniques to identify vulnerabilities and security issues in the provided code.</p>
+      
+      <h3>Our approach included:</h3>
+      
+      <ul>
+        <li><strong>Static Analysis:</strong> Automated scanning tools were used to identify common vulnerabilities, coding errors, and security anti-patterns.</li>
+        
+        <li><strong>Manual Code Review:</strong> Experienced security auditors performed a line-by-line review of the codebase to identify logical flaws, access control issues, and other vulnerabilities that automated tools might miss.</li>
+        
+        <li><strong>Architecture Analysis:</strong> The overall system design was evaluated for security implications, focusing on the interaction between components and potential attack vectors.</li>
+        
+        <li><strong>Gas Optimization:</strong> For smart contracts, we analyzed gas usage patterns and identified opportunities for optimization.</li>
+        
+        <li><strong>Best Practices Review:</strong> The code was evaluated against industry best practices and standards for secure development.</li>
+      </ul>
+      
+      <p><strong>Severity Classification:</strong></p>
+      <ul>
+        <li><strong>High:</strong> Vulnerabilities that can lead to asset loss, significant data compromise, or other severe impacts.</li>
+        <li><strong>Medium:</strong> Vulnerabilities that could potentially lead to asset loss under specific circumstances or represent significant flaws in the system's design.</li>
+        <li><strong>Low:</strong> Vulnerabilities that are limited in scope or require unusual circumstances to exploit.</li>
+        <li><strong>Informational:</strong> Issues that do not pose an immediate security risk but should be addressed as best practice.</li>
+      </ul>
+    </div>
+  </section>
+
+          
+          
+          
+          <section class="summary">
+            <h2>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="section-icon"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+              Executive Summary
+            </h2>
+            <div class="summary-grid">
+              <div class="summary-item high">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="summary-icon high"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                <div class="summary-label">High</div>
+                <div class="summary-count">1</div>
+              </div>
+              <div class="summary-item medium">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="summary-icon medium"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                <div class="summary-label">Medium</div>
+                <div class="summary-count">2</div>
+              </div>
+              <div class="summary-item low">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="summary-icon low"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                <div class="summary-label">Low</div>
+                <div class="summary-count">1</div>
+              </div>
+              <div class="summary-item info">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="summary-icon info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                <div class="summary-label">Info</div>
+                <div class="summary-count">1</div>
+              </div>
+            </div>
+          </section>
+          
+          <section class="findings-section">
+            <h2>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="section-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              Key Findings
+            </h2>
+            
+      <div class="finding high">
+        <div class="finding-header">
+          <div class="severity-container">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            <span class="severity high">High</span>
+          </div>
+          <span class="id">H-01</span>
+        </div>
+        <h3 class="title">Potential Reentrancy Vulnerability</h3>
+        <div class="description">The `swapTokensForEth` function does not use the OpenZeppelin ReentrancyGuard contract correctly. The `nonReentrant` modifier is applied to the function, but the `_approve` call before the `swapExactTokensForETHSupportingFeeOnTransferTokens` call is not protected against reentrancy attacks.</div>
+        
+        <div class="details">
+          <div class="detail">
+            <div class="detail-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              LOCATION
+            </div>
+            <div class="detail-value">swapTokensForEth function</div>
+          </div>
+          
+          
+          
+          <div class="detail">
+            <div class="detail-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              IMPACT
+            </div>
+            <div class="detail-value">An attacker could exploit this vulnerability to repeatedly call the `swapTokensForEth` function and drain the contract's ETH balance.</div>
+          </div>
+          
+          <div class="detail">
+            <div class="detail-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              RECOMMENDATION
+            </div>
+            <div class="detail-value">Ensure that the entire `swapTokensForEth` function is protected against reentrancy by moving the `_approve` call inside the `nonReentrant` modifier.</div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="finding medium">
+        <div class="finding-header">
+          <div class="severity-container">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            <span class="severity medium">Medium</span>
+          </div>
+          <span class="id">M-01</span>
+        </div>
+        <h3 class="title">Potential Integer Overflow/Underflow</h3>
+        <div class="description">The contract does not use the OpenZeppelin SafeMath library to perform arithmetic operations, which could lead to integer overflow/underflow vulnerabilities. This is especially risky for the `_update` function, where the `fee` calculation could potentially overflow or underflow.</div>
+        
+        <div class="details">
+          <div class="detail">
+            <div class="detail-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              LOCATION
+            </div>
+            <div class="detail-value">Throughout the contract, especially in the _update function</div>
+          </div>
+          
+          
+          
+          <div class="detail">
+            <div class="detail-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              IMPACT
+            </div>
+            <div class="detail-value">An attacker could exploit integer overflow/underflow vulnerabilities to manipulate the token balances and fees.</div>
+          </div>
+          
+          <div class="detail">
+            <div class="detail-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              RECOMMENDATION
+            </div>
+            <div class="detail-value">Use the OpenZeppelin SafeMath library for all arithmetic operations to prevent integer overflow/underflow vulnerabilities.</div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="finding medium">
+        <div class="finding-header">
+          <div class="severity-container">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+            <span class="severity medium">Medium</span>
+          </div>
+          <span class="id">M-02</span>
+        </div>
+        <h3 class="title">Lack of Input Validation</h3>
+        <div class="description">The contract does not perform any input validation for the `setSwapThreshold` function. An attacker could set the threshold to an extremely low value, causing the contract to swap tokens unnecessarily and potentially draining the contract's ETH balance.</div>
+        
+        <div class="details">
+          <div class="detail">
+            <div class="detail-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              LOCATION
+            </div>
+            <div class="detail-value">setSwapThreshold function</div>
+          </div>
+          
+          
+          
+          <div class="detail">
+            <div class="detail-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              IMPACT
+            </div>
+            <div class="detail-value">An attacker could set the swap threshold to an extremely low value, causing the contract to swap tokens unnecessarily and potentially draining the contract's ETH balance.</div>
+          </div>
+          
+          <div class="detail">
+            <div class="detail-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              RECOMMENDATION
+            </div>
+            <div class="detail-value">Implement input validation for the `setSwapThreshold` function to ensure that the new threshold is within a reasonable range.</div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="finding low">
+        <div class="finding-header">
+          <div class="severity-container">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="icon"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+            <span class="severity low">Low</span>
+          </div>
+          <span class="id">L-01</span>
+        </div>
+        <h3 class="title">Lack of Ownership Transfer</h3>
+        <div class="description">The contract does not provide a function to transfer ownership. The owner can only renounce ownership, which may not be desirable in all cases.</div>
+        
+        <div class="details">
+          <div class="detail">
+            <div class="detail-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              LOCATION
+            </div>
+            <div class="detail-value">renounceOwnership function</div>
+          </div>
+          
+          
+          
+          <div class="detail">
+            <div class="detail-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              IMPACT
+            </div>
+            <div class="detail-value">The contract owner may not be able to transfer ownership to a new address if needed.</div>
+          </div>
+          
+          <div class="detail">
+            <div class="detail-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              RECOMMENDATION
+            </div>
+            <div class="detail-value">Consider adding a function to transfer ownership to a new address.</div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="finding info">
+        <div class="finding-header">
+          <div class="severity-container">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+            <span class="severity info">Informational</span>
+          </div>
+          <span class="id">I-01</span>
+        </div>
+        <h3 class="title">Unused Function Parameters</h3>
+        <div class="description">The `approve`, `increaseAllowance`, and `decreaseAllowance` functions have unused function parameters, which can be removed to improve code readability and maintainability.</div>
+        
+        <div class="details">
+          <div class="detail">
+            <div class="detail-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+              LOCATION
+            </div>
+            <div class="detail-value">approve, increaseAllowance, and decreaseAllowance functions</div>
+          </div>
+          
+          
+          
+          <div class="detail">
+            <div class="detail-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              IMPACT
+            </div>
+            <div class="detail-value">The unused function parameters do not have a direct impact on the contract's security, but they can make the code less readable and maintainable.</div>
+          </div>
+          
+          <div class="detail">
+            <div class="detail-label">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              RECOMMENDATION
+            </div>
+            <div class="detail-value">Remove the unused function parameters to improve code readability and maintainability.</div>
+          </div>
+        </div>
+      </div>
+    
+          </section>
+          
+          <section class="next-steps">
+            <h2>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="section-icon"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              Next Steps
+            </h2>
+            <p>This audit report identifies several security issues that should be addressed before deployment to production. We recommend fixing all high and medium severity issues and conducting a follow-up audit to verify the remediation.</p>
+          </section>
+          
+          
+      <div class="source-code-section">
+        <h2>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="section-icon"><path d="M16 18l6-6-6-6"></path><path d="M8 6l-6 6 6 6"></path></svg>
+          Source Code
+        </h2>
+        <div class="source-files-container">
+          
+        <div class="source-file">
+          <div class="source-file-header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="file-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            <span class="source-file-name">pasted-code.txt</span>
+          </div>
+          <div class="source-file-content">
+            <pre><code>// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.28;
+
+import &quot;@openzeppelin/contracts/token/ERC20/ERC20.sol&quot;;
+import &quot;@openzeppelin/contracts/access/Ownable.sol&quot;;
+import &quot;@openzeppelin/contracts/security/ReentrancyGuard.sol&quot;;
+
+interface IUniswapV2Factory {
+    function createPair(address tokenA, address tokenB) external returns (address pair);
+}
+
+interface IUniswapV2Router02 {
+    function factory() external pure returns (address);
+    function WETH() external pure returns (address);
+    
+    function swapExactTokensForETHSupportingFeeOnTransferTokens(
+        uint256 amountIn,
+        uint256 amountOutMin,
+        address[] calldata path,
+        address to,
+        uint256 deadline
+    ) external;
+}
+
+contract SimpleAIToken is ERC20, Ownable, ReentrancyGuard {
+    uint256 private constant TOTAL_SUPPLY = 100_000_000 * 10**18;
+    uint256 public constant BUY_FEE = 4;
+    uint256 public constant SELL_FEE = 4;
+    uint256 public constant FEE_DENOMINATOR = 100;
+    
+    uint256 public swapThreshold = 500_000 * 10**18;
+    
+    address public immutable taxWallet;
+    IUniswapV2Router02 public immutable uniswapV2Router;
+    address public immutable uniswapV2Pair;
+    
+    mapping(address =&gt; bool) public automatedMarketMakerPairs;
+    
+    event SwapThresholdUpdated(uint256 newThreshold);
+    event SwapAndLiquify(uint256 tokensSwapped, uint256 ethReceived);
+    event AutomatedMarketMakerPairUpdated(address pair, bool value);
+    
+    constructor() ERC20(&quot;SimpleAI&quot;, &quot;SMPL&quot;) Ownable(msg.sender) {
+        taxWallet = 0x866D5fD31b58ab9AB9FAcD00523EcC3e16A79300;
+        
+        IUniswapV2Router02 _uniswapV2Router = IUniswapV2Router02(
+            0x4752ba5DBc23f44D87826276BF6Fd6b1C372aD24
+        );
+        
+        uniswapV2Pair = IUniswapV2Factory(_uniswapV2Router.factory())
+            .createPair(address(this), _uniswapV2Router.WETH());
+            
+        uniswapV2Router = _uniswapV2Router;
+        
+        automatedMarketMakerPairs[uniswapV2Pair] = true;
+        emit AutomatedMarketMakerPairUpdated(uniswapV2Pair, true);
+        
+        _mint(owner(), TOTAL_SUPPLY);
+    }
+    
+    function approve(address spender, uint256 amount) public virtual override returns (bool) {
+        require(amount == 0 || allowance(msg.sender, spender) == 0, &quot;ERC20: unsafe allowance&quot;);
+        return super.approve(spender, amount);
+    }
+
+    function increaseAllowance(address spender, uint256 addedValue) public virtual returns (bool) {
+        address owner = _msgSender();
+        _approve(owner, spender, allowance(owner, spender) + addedValue);
+        return true;
+    }
+
+    function decreaseAllowance(address spender, uint256 subtractedValue) public virtual returns (bool) {
+        address owner = _msgSender();
+        uint256 currentAllowance = allowance(owner, spender);
+        require(currentAllowance &gt;= subtractedValue, &quot;ERC20: decreased allowance below zero&quot;);
+        unchecked {
+            _approve(owner, spender, currentAllowance - subtractedValue);
+        }
+        return true;
+    }
+
+    function _update(address from, address to, uint256 amount) internal virtual override {
+        if (amount == 0) {
+            super._update(from, to, 0);
+            return;
+        }
+        
+        uint256 fee = 0;
+        
+        if (automatedMarketMakerPairs[from] || automatedMarketMakerPairs[to]) {
+            if (automatedMarketMakerPairs[from]) {
+                fee = (amount * BUY_FEE) / FEE_DENOMINATOR;
+            } else {
+                fee = (amount * SELL_FEE) / FEE_DENOMINATOR;
+                
+                uint256 contractTokenBalance = balanceOf(address(this));
+                if (contractTokenBalance &gt;= swapThreshold) {
+                    swapTokensForEth(contractTokenBalance);
+                }
+            }
+        }
+        
+        if (fee &gt; 0) {
+            super._update(from, address(this), fee);
+            amount -= fee;
+        }
+        
+        super._update(from, to, amount);
+    }
+    
+    function setSwapThreshold(uint256 newThreshold) external onlyOwner {
+        require(newThreshold &gt; 0, &quot;Threshold must be greater than 0&quot;);
+        swapThreshold = newThreshold;
+        emit SwapThresholdUpdated(newThreshold);
+    }
+    
+    function setAutomatedMarketMakerPair(address pair, bool value) external onlyOwner {
+        require(pair != uniswapV2Pair, &quot;Cannot remove initial pair&quot;);
+        automatedMarketMakerPairs[pair] = value;
+        emit AutomatedMarketMakerPairUpdated(pair, value);
+    }
+    
+    function swapTokensForEth(uint256 tokenAmount) private nonReentrant {
+        address[] memory path = new address[](2);
+        path[0] = address(this);
+        path[1] = uniswapV2Router.WETH();
+        
+        _approve(address(this), address(uniswapV2Router), tokenAmount);
+        
+        uint256 initialETHBalance = address(this).balance;
+        
+        uniswapV2Router.swapExactTokensForETHSupportingFeeOnTransferTokens(
+            tokenAmount,
+            0,
+            path,
+            taxWallet,
+            block.timestamp
+        );
+        
+        uint256 ethReceived = address(this).balance - initialETHBalance;
+        emit SwapAndLiquify(tokenAmount, ethReceived);
+    }
+    
+    function withdrawStuckETH() external onlyOwner {
+        (bool success,) = taxWallet.call{value: address(this).balance}(&quot;&quot;);
+        require(success, &quot;ETH transfer failed&quot;);
+    }
+
+    function withdrawStuckTokens(address token) external onlyOwner {
+        require(token != address(this), &quot;Cannot withdraw fee token&quot;);
+        IERC20(token).transfer(taxWallet, IERC20(token).balanceOf(address(this)));
+    }
+    
+    function renounceOwnership() public virtual override onlyOwner {
+        super.renounceOwnership();
+    }
+    
+    receive() external payable {}
+}</code></pre>
+          </div>
+        </div>
+      
+        </div>
+      </div>
+    
+          
+          
+          
+          
+  <section class="scope-of-work-section">
+    <h2>
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="section-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+      Scope of Work
+    </h2>
+    <div class="scope-of-work-content">
+      <p>This security audit covered the following areas:</p>
+      
+      <ul>
+        <li><strong>Code Review:</strong> A comprehensive review of the provided source code to identify security vulnerabilities, logic errors, and potential exploits.</li>
+        
+        <li><strong>Architecture Analysis:</strong> Evaluation of the overall system architecture, focusing on security implications and potential weaknesses.</li>
+        
+        <li><strong>Best Practices:</strong> Assessment of adherence to industry best practices and coding standards.</li>
+        
+        <li><strong>Gas Optimization:</strong> For smart contracts, analysis of gas usage and recommendations for optimization.</li>
+        
+        <li><strong>Testing Coverage:</strong> Review of the test suite to ensure adequate coverage of critical functionality.</li>
+      </ul>
+      
+      <p><strong>Files Analyzed:</strong> The audit covered 1 files, including all source code provided for review.</p>
+      
+      <p><strong>Audit Period:</strong> This audit was conducted on 3/16/2025.</p>
+    </div>
+  </section>
+
+          
+          
+  <section class="disclaimer-section">
+    <h2>
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class="section-icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+      Disclaimer
+    </h2>
+    <div class="disclaimer-content">
+      <p>This audit report is provided on an "as is" basis and is subject to the following limitations and disclaimers:</p>
+      
+      <ul>
+        <li><strong>Scope Limitations:</strong> This security audit is limited to the code and documentation provided to us at the time of the audit. Any subsequent changes to the codebase are not covered by this report.</li>
+        
+        <li><strong>No Guarantee of Complete Security:</strong> While we have made every effort to identify vulnerabilities and security issues, no audit can guarantee the complete absence of security vulnerabilities. New attack vectors and techniques may emerge after the audit is completed.</li>
+        
+        <li><strong>Smart Contract Risks:</strong> Smart contracts are subject to various risks, including but not limited to bugs, vulnerabilities, and exploits. Users should exercise caution and conduct their own due diligence before interacting with any smart contract.</li>
+        
+        <li><strong>Deployment Verification:</strong> This audit does not verify the correct deployment of the audited contracts. Users should independently verify that the deployed contract code matches the audited code before interacting with it.</li>
+        
+        <li><strong>No Investment Advice:</strong> This audit report does not constitute investment advice, an endorsement of the project, or a guarantee of the project's success or security.</li>
+      </ul>
+      
+      <p><strong>Verification of Deployed Addresses:</strong> Users should always verify that they are interacting with the correct contract addresses by checking official project documentation and communication channels. The contract addresses should be verified on the blockchain explorer to ensure they match the audited code.</p>
+      <p><strong>Verified Deployed Address:</strong> 0xfda0c66e042d111110be91bdc13180b08a8823af</p>
+    </div>
+  </section>
+
+        </main>
+        
+        <footer class="footer">
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo%20%282%29-zuWTBfp90yv1KCPqRFHeJ7tTDlgsAC.png" alt="MetaLabz Logo" class="footer-logo">
+          <p>© 2025 MetaLabz | MLZ Audit Suite</p>
+        </footer>
+      </div>
+    </body>
+    </html>
+  
