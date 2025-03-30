@@ -1,0 +1,2051 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLZ Audit Report - PixelVerse</title>
+    <style>
+      :root {
+        --color-high: #FFDDDD;
+        --color-high-text: #CC0000;
+        --color-high-border: #FFAAAA;
+        --color-medium: #FFEEDD;
+        --color-medium-text: #CC6600;
+        --color-medium-border: #FFCC99;
+        --color-low: #FFFFDD;
+        --color-low-text: #999900;
+        --color-low-border: #EEEE99;
+        --color-info: #DDDDFF;
+        --color-info-text: #0000CC;
+        --color-info-border: #BBBBFF;
+        --color-primary: #8855DD;
+        --color-primary-light: #F0F0FF;
+        --color-primary-dark: #6633AA;
+        --color-text: #333333;
+        --color-text-light: #666666;
+        --color-border: #DDDDDD;
+        --color-background: #FFFFFF;
+        --color-header-bg: linear-gradient(to right, #20B2AA, #9370DB, #9932CC);
+        --color-code-bg: #F8F8F8;
+        --color-highlight: #FFFF99;
+        --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --radius-sm: 4px;
+        --radius-md: 6px;
+        --radius-lg: 8px;
+      }
+      
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      
+      body {
+        font-family: var(--font-sans);
+        line-height: 1.6;
+        color: var(--color-text);
+        background-color: #F5F5F5;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background-color: var(--color-background);
+        box-shadow: var(--shadow-md);
+      }
+      
+      .header {
+        background: var(--color-header-bg);
+        color: white;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+      }
+      
+      .header h1 {
+        margin: 0;
+        font-size: 24px;
+        margin-left: 15px;
+      }
+      
+      .logo {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .content {
+        padding: 30px;
+      }
+      
+      .report-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+      
+      .report-title {
+        margin: 0 0 5px 0;
+        font-size: 24px;
+        color: var(--color-primary);
+      }
+      
+      .report-date {
+        color: var(--color-text-light);
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      
+      .project-logo {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+      }
+      
+      .project-description {
+        background-color: var(--color-primary-light);
+        padding: 15px;
+        border-radius: var(--radius-md);
+        margin-bottom: 30px;
+        border: 1px solid var(--color-border);
+      }
+      
+      h2 {
+        color: var(--color-primary);
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .section-icon {
+        color: var(--color-primary);
+      }
+      
+      .category-reports-section {
+        margin-bottom: 30px;
+      }
+      
+      .category-reports {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+      }
+      
+      .category-report {
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 15px;
+        background-color: #F9F9F9;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      
+      .category-report:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+      
+      .category-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      
+      .category-name {
+        font-weight: bold;
+        text-transform: capitalize;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      
+      .category-icon {
+        color: var(--color-primary);
+      }
+      
+      .status-icon {
+        flex-shrink: 0;
+      }
+      
+      .status-icon.complete {
+        color: #22C55E;
+      }
+      
+      .status-icon.error {
+        color: #EF4444;
+      }
+      
+      .status-icon.pending {
+        color: #3B82F6;
+      }
+      
+      .issues-count, .error-message {
+        font-size: 13px;
+        margin-top: 5px;
+      }
+      
+      .error-message {
+        color: var(--color-high-text);
+      }
+      
+      .summary {
+        margin-bottom: 30px;
+      }
+      
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+      }
+      
+      .summary-item {
+        padding: 20px;
+        border-radius: var(--radius-md);
+        text-align: center;
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .summary-item:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+      
+      .summary-item.high {
+        background-color: var(--color-high);
+        border: 1px solid var(--color-high-border);
+      }
+      
+      .summary-item.medium {
+        background-color: var(--color-medium);
+        border: 1px solid var(--color-medium-border);
+      }
+      
+      .summary-item.low {
+        background-color: var(--color-low);
+        border: 1px solid var(--color-low-border);
+      }
+      
+      .summary-item.info {
+        background-color: var(--color-info);
+        border: 1px solid var(--color-info-border);
+      }
+      
+      .summary-icon {
+        margin-bottom: 10px;
+      }
+      
+      .summary-icon.high {
+        color: var(--color-high-text);
+      }
+      
+      .summary-icon.medium {
+        color: var(--color-medium-text);
+      }
+      
+      .summary-icon.low {
+        color: var(--color-low-text);
+      }
+      
+      .summary-icon.info {
+        color: var(--color-info-text);
+      }
+      
+      .summary-label {
+        font-weight: bold;
+        font-size: 14px;
+      }
+      
+      .summary-count {
+        font-size: 28px;
+        font-weight: bold;
+        margin-top: 5px;
+      }
+      
+      .findings-section h2 {
+        color: var(--color-primary);
+        margin-bottom: 20px;
+      }
+      
+      .finding {
+        margin-bottom: 40px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid var(--color-border);
+      }
+      
+      .finding-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        align-items: center;
+      }
+      
+      .severity-container {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      
+      .severity {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: var(--radius-sm);
+        font-size: 12px;
+        font-weight: bold;
+      }
+      
+      .severity.high {
+        background-color: var(--color-high);
+        color: var(--color-high-text);
+      }
+      
+      .severity.medium {
+        background-color: var(--color-medium);
+        color: var(--color-medium-text);
+      }
+      
+      .severity.low {
+        background-color: var(--color-low);
+        color: var(--color-low-text);
+      }
+      
+      .severity.info {
+        background-color: var(--color-info);
+        color: var(--color-info-text);
+      }
+      
+      .icon {
+        flex-shrink: 0;
+      }
+      
+      .id {
+        color: var(--color-text-light);
+        font-size: 12px;
+        font-family: var(--font-mono);
+        background-color: #F0F0F0;
+        padding: 2px 6px;
+        border-radius: var(--radius-sm);
+      }
+      
+      .title {
+        margin: 0 0 15px 0;
+        font-size: 20px;
+        color: var(--color-primary-dark);
+      }
+      
+      .description {
+        margin-bottom: 20px;
+        white-space: pre-wrap;
+        line-height: 1.6;
+      }
+      
+      .details {
+        display: grid;
+        gap: 20px;
+      }
+      
+      .detail {
+        background-color: #FAFAFA;
+        padding: 15px;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+      }
+      
+      .detail-label {
+        font-size: 12px;
+        font-weight: bold;
+        color: var(--color-text-light);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        text-transform: uppercase;
+      }
+      
+      .detail-icon {
+        color: var(--color-primary);
+      }
+      
+      .detail-value {
+        line-height: 1.6;
+      }
+      
+      .code-container {
+        background-color: var(--color-code-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        margin: 15px 0;
+        overflow: hidden;
+      }
+      
+      .code-header {
+        background-color: #E8E8E8;
+        padding: 8px 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        font-family: var(--font-mono);
+        color: var(--color-text-light);
+        border-bottom: 1px solid var(--color-border);
+      }
+      
+      .file-name {
+        font-weight: bold;
+      }
+      
+      .line-range {
+        background-color: #D8D8D8;
+        padding: 2px 6px;
+        border-radius: var(--radius-sm);
+      }
+      
+      .code-snippet {
+        padding: 10px;
+        overflow-x: auto;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      
+      .code-table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      
+      .line-number {
+        text-align: right;
+        padding: 0 10px;
+        color: #999;
+        border-right: 1px solid #DDD;
+        user-select: none;
+        width: 1%;
+        white-space: nowrap;
+      }
+      
+      .code-line {
+        padding: 0 10px;
+        white-space: pre;
+      }
+      
+      .highlighted-line {
+        background-color: var(--color-highlight);
+      }
+      
+      .highlighted-line .line-number {
+        font-weight: bold;
+        color: #666;
+      }
+      
+      .next-steps {
+        background-color: var(--color-primary-light);
+        padding: 20px;
+        border-radius: var(--radius-md);
+        margin-top: 30px;
+        border: 1px solid var(--color-border);
+      }
+      
+      .next-steps h2 {
+        color: var(--color-primary);
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+      
+      .social-links {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid var(--color-border);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+      
+      .social-link {
+        color: var(--color-primary);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 8px 12px;
+        border-radius: var(--radius-md);
+        background-color: var(--color-primary-light);
+        transition: background-color 0.2s;
+      }
+      
+      .social-link:hover {
+        background-color: #E8E0FF;
+      }
+      
+      .social-icon {
+        color: var(--color-primary);
+      }
+      
+      .source-code-section {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid var(--color-border);
+      }
+      
+      .source-files-container {
+        display: grid;
+        gap: 20px;
+      }
+      
+      .source-file {
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+      }
+      
+      .source-file-header {
+        background-color: #E8E8E8;
+        padding: 10px 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--font-mono);
+        font-size: 14px;
+        font-weight: bold;
+        border-bottom: 1px solid var(--color-border);
+      }
+      
+      .file-icon {
+        color: var(--color-primary);
+      }
+      
+      .source-file-content {
+        max-height: 400px;
+        overflow-y: auto;
+        background-color: var(--color-code-bg);
+      }
+      
+      .source-file-content pre {
+        margin: 0;
+        padding: 15px;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        line-height: 1.5;
+        white-space: pre-wrap;
+      }
+      
+      .scope-of-work-section,
+      .disclaimer-section {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid var(--color-border);
+      }
+      
+      .scope-of-work-content,
+      .disclaimer-content {
+        margin-top: 15px;
+        line-height: 1.6;
+      }
+      
+      .scope-of-work-content ul,
+      .disclaimer-content ul {
+        margin-left: 20px;
+        margin-bottom: 15px;
+      }
+      
+      .scope-of-work-content li,
+      .disclaimer-content li {
+        margin-bottom: 8px;
+      }
+      
+      .scope-of-work-content strong,
+      .disclaimer-content strong {
+        font-weight: bold;
+      }
+
+      .methodology-section {
+        margin-bottom: 30px;
+        background-color: #f8f9fa;
+        border-radius: var(--radius-md);
+        padding: 20px;
+        border: 1px solid var(--color-border);
+      }
+
+      .methodology-content {
+        margin-top: 15px;
+      }
+
+      .methodology-content h3 {
+        font-size: 16px;
+        margin-bottom: 10px;
+        color: var(--color-primary-dark);
+      }
+
+      .methodology-content ul {
+        margin-left: 20px;
+        margin-bottom: 15px;
+      }
+
+      .methodology-content li {
+        margin-bottom: 8px;
+      }
+
+      .methodology-content strong {
+        font-weight: bold;
+      }
+      
+      .footer {
+        text-align: center;
+        padding: 20px;
+        background-color: #F0F0F0;
+        color: var(--color-text-light);
+        font-size: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+      }
+      
+      .footer-logo {
+        width: 24px;
+        height: 24px;
+      }
+      
+      @media print {
+        body {
+          background-color: white;
+        }
+        
+        .container {
+          box-shadow: none;
+          max-width: 100%;
+        }
+        
+        .source-file-content {
+          max-height: none;
+        }
+      }
+      
+      @media (max-width: 768px) {
+        .content {
+          padding: 20px 15px;
+        }
+        
+        .summary-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .category-reports {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo%20%282%29-zuWTBfp90yv1KCPqRFHeJ7tTDlgsAC.png" alt="MetaLabz Logo" class="logo">
+        <h1>MLZ Audit Report</h1>
+      </header>
+      
+      <main class="content">
+        <div class="report-header">
+          <div>
+            <h2 class="report-title">PixelVerse (Revised)</h2>
+            <p class="report-date">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="date-icon"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              Generated on 3/30/2025
+            <span class="revision-date"> | Revised on 3/30/2025</span></p>
+          </div>
+          <img src="data:image/png;base64,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" alt="Project Logo" class="project-logo">
+        </div>
+        
+        
+    <div class="project-description">
+      <p>Purchase pixels on the blockchain-powered Million Dollar Pixel Board. Create art, advertise, or just own a piece of digital real estate.</p>
+    </div>
+  
+        
+        
+<section class="methodology-section">
+  <h2>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="section-icon"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+    Audit Methodology
+  </h2>
+  <div class="methodology-content">
+    <p>This security audit was conducted using a combination of automated and manual analysis techniques to identify vulnerabilities and security issues in the provided code.</p>
+    
+    <h3>Our approach included:</h3>
+    
+    <ul>
+      <li><strong>Static Analysis:</strong> Automated scanning tools were used to identify common vulnerabilities, coding errors, and security anti-patterns.</li>
+      
+      <li><strong>Manual Code Review:</strong> Experienced security auditors performed a line-by-line review of the codebase to identify logical flaws, access control issues, and other vulnerabilities that automated tools might miss.</li>
+      
+      <li><strong>Architecture Analysis:</strong> The overall system design was evaluated for security implications, focusing on the interaction between components and potential attack vectors.</li>
+      
+      <li><strong>Gas Optimization:</strong> For smart contracts, we analyzed gas usage patterns and identified opportunities for optimization.</li>
+      
+      <li><strong>Best Practices Review:</strong> The code was evaluated against industry best practices and standards for secure development.</li>
+    </ul>
+    
+    <p><strong>Severity Classification:</strong></p>
+    <ul>
+      <li><strong>High:</strong> Vulnerabilities that can lead to asset loss, significant data compromise, or other severe impacts.</li>
+      <li><strong>Medium:</strong> Vulnerabilities that could potentially lead to asset loss under specific circumstances or represent significant flaws in the system's design.</li>
+      <li><strong>Low:</strong> Vulnerabilities that are limited in scope or require unusual circumstances to exploit.</li>
+      <li><strong>Informational:</strong> Issues that do not pose an immediate security risk but should be addressed as best practice.</li>
+    </ul>
+  </div>
+</section>
+
+        
+        
+        
+        <section class="summary">
+          <h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="section-icon"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+            Executive Summary
+          </h2>
+          <div class="summary-grid">
+            <div class="summary-item high">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="summary-icon high"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              <div class="summary-label">High</div>
+              <div class="summary-count">1</div>
+            </div>
+            <div class="summary-item medium">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="summary-icon medium"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              <div class="summary-label">Medium</div>
+              <div class="summary-count">2</div>
+            </div>
+            <div class="summary-item low">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="summary-icon low"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+              <div class="summary-label">Low</div>
+              <div class="summary-count">1</div>
+            </div>
+            <div class="summary-item info">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="summary-icon info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              <div class="summary-label">Info</div>
+              <div class="summary-count">1</div>
+            </div>
+          </div>
+        </section>
+        
+        <section class="findings-section">
+          <h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="section-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            Key Findings
+          </h2>
+          
+    <div class="finding low">
+      <div class="finding-header">
+        <div class="severity-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span class="severity low">Low</span>
+        </div>
+        <span class="id">H-01</span>
+      </div>
+      <h3 class="title">Reentrancy Vulnerability</h3>
+      <div class="description">The `buyListedPlot` and `buyListedBundle` functions are vulnerable to reentrancy attacks. The USDC token transfer is executed after the internal state updates, which could allow an attacker to repeatedly call these functions before the state is updated, draining the contract's USDC balance.</div>
+      
+      <div class="details"><div class="detail severity-revision" style="background-color: rgb(240, 247, 255); border-left: 3px solid rgb(59, 130, 246);">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            REVISED SEVERITY
+          </div>
+          <div class="detail-value">
+            <span class="original-severity">Original: <strong>High</strong></span>
+            <span class="revised-severity">Revised: <strong class="severity low">Low</strong></span>
+            <div class="revision-reason">The contract does not hold any USDC.</div>
+          </div>
+        </div>
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            LOCATION
+          </div>
+          <div class="detail-value">Lines 342-384 and 718-778</div>
+        </div>
+        
+        
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            IMPACT
+          </div>
+          <div class="detail-value">An attacker could repeatedly call the `buyListedPlot` or `buyListedBundle` functions to drain the contract's USDC balance.</div>
+        </div>
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            RECOMMENDATION
+          </div>
+          <div class="detail-value">Implement the Checks-Effects-Interactions pattern to mitigate reentrancy attacks. Perform all state updates before executing external calls.</div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="finding low">
+      <div class="finding-header">
+        <div class="severity-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <span class="severity low">Low</span>
+        </div>
+        <span class="id">M-01</span>
+      </div>
+      <h3 class="title">Lack of Input Validation</h3>
+      <div class="description">The `setFeeReceivers` and `setFeeReceiver` functions do not validate that the provided fee receiver addresses are not the zero address. This could allow the contract owner to set the fee receiver to the zero address, effectively disabling fee collection.</div>
+      
+      <div class="details"><div class="detail severity-revision" style="background-color: rgb(240, 247, 255); border-left: 3px solid rgb(59, 130, 246);">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            REVISED SEVERITY
+          </div>
+          <div class="detail-value">
+            <span class="original-severity">Original: <strong>Medium</strong></span>
+            <span class="revised-severity">Revised: <strong class="severity low">Low</strong></span>
+            <div class="revision-reason">Proper management is required to ensure the addresses are set properly, but can be updated provided any error is to occur.</div>
+          </div>
+        </div>
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            LOCATION
+          </div>
+          <div class="detail-value">Lines 159-170 and 172-182</div>
+        </div>
+        
+        
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            IMPACT
+          </div>
+          <div class="detail-value">The contract owner could set the fee receiver to the zero address, preventing fee collection and distribution.</div>
+        </div>
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            RECOMMENDATION
+          </div>
+          <div class="detail-value">Add a check to ensure that the provided fee receiver addresses are not the zero address.</div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="finding medium">
+      <div class="finding-header">
+        <div class="severity-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <span class="severity medium">Medium</span>
+        </div>
+        <span class="id">M-02</span>
+      </div>
+      <h3 class="title">Potential Integer Overflow/Underflow</h3>
+      <div class="description">The contract uses unchecked arithmetic operations, which could lead to integer overflow or underflow vulnerabilities. For example, the `_processFee` function calculates the fee amount using multiplication and division, which could overflow or underflow if the input values are large enough.</div>
+      
+      <div class="details">
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            LOCATION
+          </div>
+          <div class="detail-value">Lines 193-232</div>
+        </div>
+        
+        
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            IMPACT
+          </div>
+          <div class="detail-value">An attacker could exploit integer overflow or underflow vulnerabilities to manipulate the fee calculation and distribution.</div>
+        </div>
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            RECOMMENDATION
+          </div>
+          <div class="detail-value">Use OpenZeppelin's SafeMath library or equivalent to perform all arithmetic operations in a safe manner, preventing integer overflow and underflow vulnerabilities.</div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="finding low">
+      <div class="finding-header">
+        <div class="severity-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="icon"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          <span class="severity low">Low</span>
+        </div>
+        <span class="id">L-01</span>
+      </div>
+      <h3 class="title">Lack of Timestamp Dependency Mitigation</h3>
+      <div class="description">The contract uses `block.timestamp` to set the `purchaseTimestamp` and `creationTimestamp` properties. This could make the contract vulnerable to time manipulation attacks, where an attacker could manipulate the block timestamp to their advantage.</div>
+      
+      <div class="details">
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            LOCATION
+          </div>
+          <div class="detail-value">Lines 351-352, 718-719, and 1001</div>
+        </div>
+        
+        
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            IMPACT
+          </div>
+          <div class="detail-value">An attacker could manipulate the block timestamp to influence the purchase and creation timestamps of plots and bundles.</div>
+        </div>
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            RECOMMENDATION
+          </div>
+          <div class="detail-value">Consider using a more reliable source of time, such as an oracle, to mitigate timestamp dependency issues.</div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="finding info">
+      <div class="finding-header">
+        <div class="severity-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span class="severity info">Informational</span>
+        </div>
+        <span class="id">I-01</span>
+      </div>
+      <h3 class="title">Gas Optimization Opportunity</h3>
+      <div class="description">The `getNeighboringPlots` function could be optimized to reduce gas consumption. The current implementation creates a new array and fills it with the neighboring plot IDs, which can be expensive. An alternative approach could be to return the neighboring plot IDs directly without creating a new array.</div>
+      
+      <div class="details">
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            LOCATION
+          </div>
+          <div class="detail-value">Lines 1054-1102</div>
+        </div>
+        
+        
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            IMPACT
+          </div>
+          <div class="detail-value">The current implementation of `getNeighboringPlots` may consume more gas than necessary.</div>
+        </div>
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            RECOMMENDATION
+          </div>
+          <div class="detail-value">Consider optimizing the `getNeighboringPlots` function to reduce gas consumption, for example, by returning the neighboring plot IDs directly without creating a new array.</div>
+        </div>
+      </div>
+    </div>
+  
+        </section>
+        
+        <section class="next-steps">
+          <h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="section-icon"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            Next Steps
+          </h2>
+          <p>This audit report identifies several security issues that should be addressed before deployment to production. We recommend fixing all high and medium severity issues and conducting a follow-up audit to verify the remediation.</p>
+        </section>
+        
+        
+    <div class="source-code-section">
+      <h2>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="section-icon"><path d="M16 18l6-6-6-6"></path><path d="M8 6l-6 6 6 6"></path></svg>
+        Source Code
+      </h2>
+      <div class="source-files-container">
+        
+      <div class="source-file">
+        <div class="source-file-header">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="file-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          <span class="source-file-name">pasted-code.txt</span>
+        </div>
+        <div class="source-file-content">
+          <pre><code>// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.28;
+
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+
+/**
+ * @title Pixelverse
+ * @dev A contract for managing a 100x100 grid of purchasable and resellable plots
+ * @notice Enhanced with ReentrancyGuard, optimized bundle verification, USDC payment support, and fee splitting
+ */
+contract Pixelverse is Ownable, ReentrancyGuard {
+    uint256 public constant GRID_SIZE = 100;
+    uint256 public constant MAX_PLOTS = GRID_SIZE * GRID_SIZE; // 10,000 plots
+    uint256 public plotPrice;
+    
+    // Fee configuration
+    address[4] public feeReceivers; // Four fee receivers for splitting fees
+    uint256 public platformFeePercent = 250; // 2.5% in basis points (100 = 1%)
+    uint256 public resaleRoyaltyPercent = 500; // 5% in basis points (100 = 1%)
+    uint256 public constant MAX_FEE_PERCENT = 2500; // 25% maximum fee
+    
+    // USDC token contract
+    IERC20 public usdcToken;
+    
+    struct Plot {
+        address owner;
+        uint8 x;
+        uint8 y;
+        bool isForSale;
+        uint256 salePrice;
+        uint256 purchaseTimestamp;
+    }
+    
+    // Mapping from plot ID to plot details
+    mapping(uint256 =&gt; Plot) public plots;
+    
+    // Mapping of address to array of plot IDs owned
+    mapping(address =&gt; uint256[]) private _plotsOwnedByUser;
+    
+    // Mapping to track indices in the _plotsOwnedByUser array
+    mapping(address =&gt; mapping(uint256 =&gt; uint256)) private _plotIndexInOwnerArray;
+    
+    // Array of all plots listed for sale
+    uint256[] private _plotsForSale;
+    
+    // Mapping to track indices in the _plotsForSale array
+    mapping(uint256 =&gt; uint256) private _plotIndexInSaleArray;
+    
+    // Plot bundle structures for multi-plot operations
+    struct PlotBundle {
+        uint256[] plotIds;
+        address owner;
+        bool isForSale;
+        uint256 salePrice;
+        uint256 creationTimestamp;
+    }
+    
+    // ID counter for plot bundles
+    uint256 private _nextBundleId = 1;
+    
+    // Mapping of bundle ID to bundle details
+    mapping(uint256 =&gt; PlotBundle) public plotBundles;
+    
+    // Mapping of address to bundle IDs owned
+    mapping(address =&gt; uint256[]) private _bundlesOwnedByUser;
+    
+    // Mapping to track indices in the _bundlesOwnedByUser array
+    mapping(address =&gt; mapping(uint256 =&gt; uint256)) private _bundleIndexInOwnerArray;
+    
+    // Array of all bundles listed for sale
+    uint256[] private _bundlesForSale;
+    
+    // Mapping to track indices in the _bundlesForSale array
+    mapping(uint256 =&gt; uint256) private _bundleIndexInSaleArray;
+    
+    // Mapping to track if a plot is part of a bundle (bundleId =&gt; plotId =&gt; bool)
+    mapping(uint256 =&gt; mapping(uint256 =&gt; bool)) private _plotInBundle;
+    
+    // Stats tracking
+    uint256 public totalPlotsSold;
+    uint256 public totalResaleTransactions;
+    uint256 public totalVolume;
+    uint256 public totalBundlesSold;
+    
+    // Events
+    event PlotPurchased(address indexed buyer, uint256 indexed plotId, uint8 x, uint8 y, uint256 price);
+    event PlotListed(address indexed seller, uint256 indexed plotId, uint256 price);
+    event PlotSold(address indexed seller, address indexed buyer, uint256 indexed plotId, uint256 price);
+    event PlotUnlisted(address indexed owner, uint256 indexed plotId);
+    event PlotPriceChanged(uint256 newPrice);
+    
+    // Bundle events
+    event MultiplePlotsPurchased(address indexed buyer, uint256[] plotIds, uint256 totalPrice);
+    event PlotBundleCreated(address indexed owner, uint256 indexed bundleId, uint256[] plotIds);
+    event PlotBundleListed(address indexed seller, uint256 indexed bundleId, uint256 price);
+    event PlotBundleSold(address indexed seller, address indexed buyer, uint256 indexed bundleId, uint256 price);
+    event PlotBundleUnlisted(address indexed owner, uint256 indexed bundleId);
+    event PlotBundleDismantled(address indexed owner, uint256 indexed bundleId, uint256[] plotIds);
+    
+    // Events for fee system
+    event FeeReceiversUpdated(address[4] previousReceivers, address[4] newReceivers);
+    event FeeReceiverUpdated(uint256 index, address previousReceiver, address newReceiver);
+    event PlatformFeeUpdated(uint256 previousFee, uint256 newFee);
+    event ResaleRoyaltyUpdated(uint256 previousRoyalty, uint256 newRoyalty);
+    event FeesCollected(address[4] receivers, uint256[] amounts, string feeType);
+    
+    // USDC related events
+    event USDCTokenAddressUpdated(address indexed previousAddress, address indexed newAddress);
+    
+    // Withdraw events
+    event WithdrawExecuted(address indexed receiver, uint256 amount, address tokenAddress);
+    
+    constructor(
+        uint256 _initialPlotPrice, 
+        address[4] memory _feeReceivers,
+        address _usdcTokenAddress
+    ) Ownable(msg.sender) {
+        plotPrice = _initialPlotPrice;
+        feeReceivers = _feeReceivers;
+        usdcToken = IERC20(_usdcTokenAddress);
+    }
+    
+    /**
+     * @dev Converts x,y coordinates to a plot ID
+     */
+    function coordinatesToPlotId(uint8 x, uint8 y) public pure returns (uint256) {
+        require(x &lt; GRID_SIZE, "X coordinate out of bounds");
+        require(y &lt; GRID_SIZE, "Y coordinate out of bounds");
+        return (y * GRID_SIZE) + x;
+    }
+    
+    /**
+     * @dev Converts a plot ID to x,y coordinates
+     */
+    function plotIdToCoordinates(uint256 plotId) public pure returns (uint8 x, uint8 y) {
+        require(plotId &lt; MAX_PLOTS, "Plot ID out of bounds");
+        y = uint8(plotId / GRID_SIZE);
+        x = uint8(plotId % GRID_SIZE);
+        return (x, y);
+    }
+    
+    /**
+     * @dev Sets the base price for purchasing plots directly from the contract
+     */
+    function setPlotPrice(uint256 _plotPrice) external onlyOwner {
+        plotPrice = _plotPrice;
+        emit PlotPriceChanged(_plotPrice);
+    }
+    
+    /**
+     * @dev Updates all fee receivers at once
+     */
+    function setFeeReceivers(address[4] calldata _feeReceivers) external onlyOwner {
+        for (uint256 i = 0; i &lt; 4; i++) {
+            require(_feeReceivers[i] != address(0), "Cannot set fee receiver to zero address");
+        }
+        
+        address[4] memory oldReceivers = feeReceivers;
+        feeReceivers = _feeReceivers;
+        
+        emit FeeReceiversUpdated(oldReceivers, _feeReceivers);
+    }
+    
+    /**
+     * @dev Updates a single fee receiver
+     */
+    function setFeeReceiver(uint256 index, address _feeReceiver) external onlyOwner {
+        require(index &lt; 4, "Index out of bounds");
+        require(_feeReceiver != address(0), "Cannot set fee receiver to zero address");
+        
+        address oldReceiver = feeReceivers[index];
+        feeReceivers[index] = _feeReceiver;
+        
+        emit FeeReceiverUpdated(index, oldReceiver, _feeReceiver);
+    }
+    
+    /**
+     * @dev Updates the USDC token contract address
+     */
+    function setUSDCTokenAddress(address _usdcTokenAddress) external onlyOwner {
+        require(_usdcTokenAddress != address(0), "Cannot set token address to zero address");
+        
+        address oldTokenAddress = address(usdcToken);
+        usdcToken = IERC20(_usdcTokenAddress);
+        
+        emit USDCTokenAddressUpdated(oldTokenAddress, _usdcTokenAddress);
+    }
+    
+    /**
+     * @dev Updates the platform fee percentage (in basis points)
+     */
+    function setPlatformFee(uint256 _feePercent) external onlyOwner {
+        require(_feePercent &lt;= MAX_FEE_PERCENT, "Fee too high");
+        uint256 oldFee = platformFeePercent;
+        platformFeePercent = _feePercent;
+        emit PlatformFeeUpdated(oldFee, _feePercent);
+    }
+    
+    /**
+     * @dev Updates the resale royalty percentage (in basis points)
+     */
+    function setResaleRoyalty(uint256 _royaltyPercent) external onlyOwner {
+        require(_royaltyPercent &lt;= MAX_FEE_PERCENT, "Royalty too high");
+        uint256 oldRoyalty = resaleRoyaltyPercent;
+        resaleRoyaltyPercent = _royaltyPercent;
+        emit ResaleRoyaltyUpdated(oldRoyalty, _royaltyPercent);
+    }
+    
+    /**
+     * @dev Calculates and transfers fee amount split among the four fee receivers
+     * @return totalFeeAmount The total fee amount that was distributed
+     */
+    function _processFee(uint256 amount, uint256 feePercent, string memory feeType) internal returns (uint256) {
+        uint256 totalFeeAmount = (amount * feePercent) / 10000;
+        if (totalFeeAmount == 0) {
+            return 0;
+        }
+        
+        // Calculate individual fee amounts
+        uint256[] memory feeAmounts = new uint256[](4);
+        uint256 remainingFee = totalFeeAmount;
+        
+        // Split fees into 4 equal parts (handling remainder)
+        for (uint256 i = 0; i &lt; 4; i++) {
+            if (i == 3) {
+                // Last receiver gets any remainder
+                feeAmounts[i] = remainingFee;
+            } else {
+                feeAmounts[i] = totalFeeAmount / 4;
+                remainingFee -= feeAmounts[i];
+            }
+            
+            // Transfer fee to receiver if amount is non-zero
+            if (feeAmounts[i] &gt; 0 &amp;&amp; feeReceivers[i] != address(0)) {
+                require(
+                    usdcToken.transferFrom(msg.sender, feeReceivers[i], feeAmounts[i]),
+                    "Fee transfer failed"
+                );
+            }
+        }
+        
+        emit FeesCollected(feeReceivers, feeAmounts, feeType);
+        return totalFeeAmount;
+    }
+    
+    /**
+     * @dev Purchases a plot at the given coordinates using USDC
+     * @notice Protected against reentrancy attacks
+     * @notice Requires USDC approval before calling
+     */
+    function purchasePlot(uint8 x, uint8 y) external nonReentrant {
+        uint256 plotId = coordinatesToPlotId(x, y);
+        
+        // Check if the plot is already owned
+        require(plots[plotId].owner == address(0), "Plot already owned");
+        
+        // Process platform fee
+        _processFee(plotPrice, platformFeePercent, "PRIMARY_SALE");
+        
+        // Transfer USDC tokens
+        require(
+            usdcToken.transferFrom(msg.sender, address(this), plotPrice - (plotPrice * platformFeePercent / 10000)),
+            "USDC transfer failed"
+        );
+        
+        // Store plot details
+        plots[plotId] = Plot({
+            owner: msg.sender,
+            x: x,
+            y: y,
+            isForSale: false,
+            salePrice: 0,
+            purchaseTimestamp: block.timestamp
+        });
+        
+        // Update ownership tracking
+        _plotsOwnedByUser[msg.sender].push(plotId);
+        _plotIndexInOwnerArray[msg.sender][plotId] = _plotsOwnedByUser[msg.sender].length - 1;
+        
+        // Update stats
+        totalPlotsSold++;
+        totalVolume += plotPrice;
+        
+        emit PlotPurchased(msg.sender, plotId, x, y, plotPrice);
+    }
+    
+    /**
+     * @dev Lists a plot for sale
+     */
+    function listPlotForSale(uint256 plotId, uint256 price) external {
+        require(plots[plotId].owner == msg.sender, "Not owner of plot");
+        require(price &gt; 0, "Price must be greater than zero");
+        
+        // Check if plot is part of any bundle that's listed for sale
+        bool isBundlePlot = false;
+        uint256[] memory ownerBundles = _bundlesOwnedByUser[msg.sender];
+        for (uint256 i = 0; i &lt; ownerBundles.length; i++) {
+            PlotBundle storage bundle = plotBundles[ownerBundles[i]];
+            if (bundle.isForSale) {
+                for (uint256 j = 0; j &lt; bundle.plotIds.length; j++) {
+                    if (bundle.plotIds[j] == plotId) {
+                        isBundlePlot = true;
+                        break;
+                    }
+                }
+                if (isBundlePlot) break;
+            }
+        }
+        require(!isBundlePlot, "Plot is part of a bundle listed for sale");
+        
+        plots[plotId].isForSale = true;
+        plots[plotId].salePrice = price;
+        
+        // Add to plots for sale array if not already listed
+        if (_plotIndexInSaleArray[plotId] == 0 &amp;&amp; _plotsForSale.length == 0) {
+            _plotsForSale.push(plotId);
+            _plotIndexInSaleArray[plotId] = _plotsForSale.length - 1;
+        } else if (_plotsForSale.length &gt; 0 &amp;&amp; _plotsForSale[_plotIndexInSaleArray[plotId]] != plotId) {
+            _plotsForSale.push(plotId);
+            _plotIndexInSaleArray[plotId] = _plotsForSale.length - 1;
+        }
+        
+        emit PlotListed(msg.sender, plotId, price);
+    }
+    
+    /**
+     * @dev Removes a plot from sale
+     */
+    function unlistPlot(uint256 plotId) external {
+        require(plots[plotId].owner == msg.sender, "Not owner of plot");
+        require(plots[plotId].isForSale, "Plot is not for sale");
+        
+        plots[plotId].isForSale = false;
+        plots[plotId].salePrice = 0;
+        
+        // Remove from plots for sale array
+        uint256 lastPlotIndex = _plotsForSale.length - 1;
+        uint256 plotIndex = _plotIndexInSaleArray[plotId];
+        
+        if (plotIndex != lastPlotIndex) {
+            uint256 lastPlotId = _plotsForSale[lastPlotIndex];
+            _plotsForSale[plotIndex] = lastPlotId;
+            _plotIndexInSaleArray[lastPlotId] = plotIndex;
+        }
+        
+        _plotsForSale.pop();
+        delete _plotIndexInSaleArray[plotId];
+        
+        emit PlotUnlisted(msg.sender, plotId);
+    }
+    
+    /**
+     * @dev Purchases a plot that is listed for sale by another user using USDC
+     * @notice Protected against reentrancy attacks
+     * @notice Requires USDC approval before calling
+     */
+    function buyListedPlot(uint256 plotId) external nonReentrant {
+        require(plots[plotId].isForSale, "Plot is not for sale");
+        require(plots[plotId].owner != msg.sender, "You already own this plot");
+        
+        address payable seller = payable(plots[plotId].owner);
+        uint256 salePrice = plots[plotId].salePrice;
+        
+        // Process platform fee and royalty
+        uint256 platformFeeAmount = _processFee(salePrice, platformFeePercent, "SECONDARY_SALE");
+        uint256 royaltyAmount = _processFee(salePrice, resaleRoyaltyPercent, "RESALE_ROYALTY");
+        uint256 sellerAmount = salePrice - platformFeeAmount - royaltyAmount;
+        
+        // Transfer USDC to seller
+        if (sellerAmount &gt; 0) {
+            require(
+                usdcToken.transferFrom(msg.sender, seller, sellerAmount),
+                "USDC transfer to seller failed"
+            );
+        }
+        
+        // Remove plot from seller's ownership
+        uint256 lastPlotIndex = _plotsOwnedByUser[seller].length - 1;
+        uint256 plotIndex = _plotIndexInOwnerArray[seller][plotId];
+        
+        if (plotIndex != lastPlotIndex) {
+            uint256 lastPlotId = _plotsOwnedByUser[seller][lastPlotIndex];
+            _plotsOwnedByUser[seller][plotIndex] = lastPlotId;
+            _plotIndexInOwnerArray[seller][lastPlotId] = plotIndex;
+        }
+        
+        _plotsOwnedByUser[seller].pop();
+        delete _plotIndexInOwnerArray[seller][plotId];
+        
+        // Remove from plots for sale array
+        lastPlotIndex = _plotsForSale.length - 1;
+        plotIndex = _plotIndexInSaleArray[plotId];
+        
+        if (plotIndex != lastPlotIndex) {
+            uint256 lastPlotId = _plotsForSale[lastPlotIndex];
+            _plotsForSale[plotIndex] = lastPlotId;
+            _plotIndexInSaleArray[lastPlotId] = plotIndex;
+        }
+        
+        _plotsForSale.pop();
+        delete _plotIndexInSaleArray[plotId];
+        
+        // Update plot details
+        plots[plotId].owner = msg.sender;
+        plots[plotId].isForSale = false;
+        plots[plotId].salePrice = 0;
+        plots[plotId].purchaseTimestamp = block.timestamp;
+        
+        // Add plot to buyer's ownership
+        _plotsOwnedByUser[msg.sender].push(plotId);
+        _plotIndexInOwnerArray[msg.sender][plotId] = _plotsOwnedByUser[msg.sender].length - 1;
+        
+        // Update stats
+        totalResaleTransactions++;
+        totalVolume += salePrice;
+        
+        emit PlotSold(seller, msg.sender, plotId, salePrice);
+    }
+    
+    /**
+     * @dev Purchases multiple plots at once using USDC
+     * @notice Protected against reentrancy attacks
+     * @notice Requires USDC approval before calling
+     */
+    function purchaseMultiplePlots(uint8[] calldata x, uint8[] calldata y) external nonReentrant {
+        require(x.length == y.length, "Coordinate arrays must have the same length");
+        require(x.length &gt; 0, "Must purchase at least one plot");
+        
+        uint256 totalCost = plotPrice * x.length;
+        
+        // Process platform fee
+        uint256 feeAmount = _processFee(totalCost, platformFeePercent, "PRIMARY_SALE_BULK");
+        
+        // Transfer USDC tokens
+        require(
+            usdcToken.transferFrom(msg.sender, address(this), totalCost - feeAmount),
+            "USDC transfer failed"
+        );
+        
+        uint256[] memory purchasedPlotIds = new uint256[](x.length);
+        
+        for (uint256 i = 0; i &lt; x.length; i++) {
+            uint256 plotId = coordinatesToPlotId(x[i], y[i]);
+            
+            // Check if the plot is already owned
+            require(plots[plotId].owner == address(0), "Plot already owned");
+            
+            // Store plot details
+            plots[plotId] = Plot({
+                owner: msg.sender,
+                x: x[i],
+                y: y[i],
+                isForSale: false,
+                salePrice: 0,
+                purchaseTimestamp: block.timestamp
+            });
+            
+            // Update ownership tracking
+            _plotsOwnedByUser[msg.sender].push(plotId);
+            _plotIndexInOwnerArray[msg.sender][plotId] = _plotsOwnedByUser[msg.sender].length - 1;
+            
+            // Store plot ID for event
+            purchasedPlotIds[i] = plotId;
+        }
+        
+        // Update stats
+        totalPlotsSold += x.length;
+        totalVolume += totalCost;
+        
+        emit MultiplePlotsPurchased(msg.sender, purchasedPlotIds, totalCost);
+    }
+    
+    /**
+     * @dev Creates a bundle of plots that can be listed for sale together
+     * @param plotIds Array of plot IDs to include in the bundle
+     */
+    function createPlotBundle(uint256[] calldata plotIds) external {
+        require(plotIds.length &gt; 1, "Bundle must include at least 2 plots");
+        
+        // Verify ownership of all plots and check for duplicates with O(n²) complexity
+        for (uint256 i = 0; i &lt; plotIds.length; i++) {
+            uint256 plotId = plotIds[i];
+            require(plotId &lt; MAX_PLOTS, "Plot ID out of bounds");
+            require(plots[plotId].owner == msg.sender, "Not owner of all plots");
+            require(!plots[plotId].isForSale, "Plot already listed for individual sale");
+            
+            // Check for duplicates
+            for (uint256 j = 0; j &lt; i; j++) {
+                require(plotIds[j] != plotId, "Duplicate plot IDs not allowed");
+            }
+        }
+        
+        // Create new bundle
+        uint256 bundleId = _nextBundleId++;
+        
+        // Create a copy of plotIds to store in the bundle
+        uint256[] memory bundlePlotIds = new uint256[](plotIds.length);
+        for (uint256 i = 0; i &lt; plotIds.length; i++) {
+            bundlePlotIds[i] = plotIds[i];
+            // Mark plots as part of this bundle
+            _plotInBundle[bundleId][plotIds[i]] = true;
+        }
+        
+        plotBundles[bundleId] = PlotBundle({
+            plotIds: bundlePlotIds,
+            owner: msg.sender,
+            isForSale: false,
+            salePrice: 0,
+            creationTimestamp: block.timestamp
+        });
+        
+        // Update ownership tracking
+        _bundlesOwnedByUser[msg.sender].push(bundleId);
+        _bundleIndexInOwnerArray[msg.sender][bundleId] = _bundlesOwnedByUser[msg.sender].length - 1;
+        
+        emit PlotBundleCreated(msg.sender, bundleId, plotIds);
+    }
+    
+    /**
+     * @dev Dismantles (unbundles) a plot bundle
+     * @param bundleId The ID of the bundle to dismantle
+     */
+    function unbundlePlots(uint256 bundleId) external {
+        require(plotBundles[bundleId].owner == msg.sender, "Not owner of bundle");
+        require(!plotBundles[bundleId].isForSale, "Cannot unbundle a bundle listed for sale");
+        
+        PlotBundle storage bundle = plotBundles[bundleId];
+        uint256[] memory plotIds = bundle.plotIds;
+        
+        // Remove bundle from owner's bundles
+        uint256 lastBundleIndex = _bundlesOwnedByUser[msg.sender].length - 1;
+        uint256 bundleIndex = _bundleIndexInOwnerArray[msg.sender][bundleId];
+        
+        if (bundleIndex != lastBundleIndex) {
+            uint256 lastBundleId = _bundlesOwnedByUser[msg.sender][lastBundleIndex];
+            _bundlesOwnedByUser[msg.sender][bundleIndex] = lastBundleId;
+            _bundleIndexInOwnerArray[msg.sender][lastBundleId] = bundleIndex;
+        }
+        
+        _bundlesOwnedByUser[msg.sender].pop();
+        delete _bundleIndexInOwnerArray[msg.sender][bundleId];
+        
+        // Remove plots from bundle mapping
+        for (uint256 i = 0; i &lt; plotIds.length; i++) {
+            delete _plotInBundle[bundleId][plotIds[i]];
+        }
+        
+        // Emit event before deleting the bundle data
+        emit PlotBundleDismantled(msg.sender, bundleId, plotIds);
+        
+        // Clear bundle data
+        delete plotBundles[bundleId];
+    }
+    
+    /**
+     * @dev Lists a bundle of plots for sale
+     */
+    function listBundleForSale(uint256 bundleId, uint256 price) external {
+        require(plotBundles[bundleId].owner == msg.sender, "Not owner of bundle");
+        require(price &gt; 0, "Price must be greater than zero");
+        
+        PlotBundle storage bundle = plotBundles[bundleId];
+        
+        // Verify ownership of all plots still belongs to the caller
+        for (uint256 i = 0; i &lt; bundle.plotIds.length; i++) {
+            uint256 plotId = bundle.plotIds[i];
+            require(plots[plotId].owner == msg.sender, "No longer owner of all plots");
+            require(!plots[plotId].isForSale, "Plot already listed for individual sale");
+        }
+        
+        // List the bundle for sale
+        bundle.isForSale = true;
+        bundle.salePrice = price;
+        
+        // Add to bundles for sale array
+        _bundlesForSale.push(bundleId);
+        _bundleIndexInSaleArray[bundleId] = _bundlesForSale.length - 1;
+        
+        emit PlotBundleListed(msg.sender, bundleId, price);
+    }
+    
+    /**
+     * @dev Removes a bundle from sale
+     */
+    function unlistBundle(uint256 bundleId) external {
+        require(plotBundles[bundleId].owner == msg.sender, "Not owner of bundle");
+        require(plotBundles[bundleId].isForSale, "Bundle is not for sale");
+        
+        PlotBundle storage bundle = plotBundles[bundleId];
+        bundle.isForSale = false;
+        bundle.salePrice = 0;
+        
+        // Remove from bundles for sale array
+        uint256 lastBundleIndex = _bundlesForSale.length - 1;
+        uint256 bundleIndex = _bundleIndexInSaleArray[bundleId];
+        
+        if (bundleIndex != lastBundleIndex) {
+            uint256 lastBundleId = _bundlesForSale[lastBundleIndex];
+            _bundlesForSale[bundleIndex] = lastBundleId;
+            _bundleIndexInSaleArray[lastBundleId] = bundleIndex;
+        }
+        
+        _bundlesForSale.pop();
+        delete _bundleIndexInSaleArray[bundleId];
+        
+        emit PlotBundleUnlisted(msg.sender, bundleId);
+    }
+    
+    /**
+     * @dev Purchases a bundle of plots that is listed for sale using USDC
+     * @notice Protected against reentrancy attacks
+     * @notice Requires USDC approval before calling
+     */
+    function buyListedBundle(uint256 bundleId) external nonReentrant {
+        PlotBundle storage bundle = plotBundles[bundleId];
+        
+        require(bundle.isForSale, "Bundle is not for sale");
+        require(bundle.owner != msg.sender, "You already own this bundle");
+        
+        address payable seller = payable(bundle.owner);
+        uint256 salePrice = bundle.salePrice;
+        
+        // Process platform fee and royalty
+        uint256 platformFeeAmount = _processFee(salePrice, platformFeePercent, "SECONDARY_SALE_BUNDLE");
+        uint256 royaltyAmount = _processFee(salePrice, resaleRoyaltyPercent, "RESALE_ROYALTY_BUNDLE");
+        uint256 sellerAmount = salePrice - platformFeeAmount - royaltyAmount;
+        
+        // Transfer USDC to seller
+        if (sellerAmount &gt; 0) {
+            require(
+                usdcToken.transferFrom(msg.sender, seller, sellerAmount),
+                "USDC transfer to seller failed"
+            );
+        }
+        
+        // Transfer ownership of all plots in the bundle
+        for (uint256 i = 0; i &lt; bundle.plotIds.length; i++) {
+            uint256 plotId = bundle.plotIds[i];
+            
+            // Update plot ownership
+            plots[plotId].owner = msg.sender;
+            plots[plotId].purchaseTimestamp = block.timestamp;
+            
+            // Remove plot from seller's ownership
+            uint256 lastPlotIndex = _plotsOwnedByUser[seller].length - 1;
+            uint256 plotIndex = _plotIndexInOwnerArray[seller][plotId];
+            
+            if (plotIndex != lastPlotIndex) {
+                uint256 lastPlotId = _plotsOwnedByUser[seller][lastPlotIndex];
+                _plotsOwnedByUser[seller][plotIndex] = lastPlotId;
+                _plotIndexInOwnerArray[seller][lastPlotId] = plotIndex;
+            }
+            
+            _plotsOwnedByUser[seller].pop();
+            delete _plotIndexInOwnerArray[seller][plotId];
+            
+            // Add plot to buyer's ownership
+            _plotsOwnedByUser[msg.sender].push(plotId);
+            _plotIndexInOwnerArray[msg.sender][plotId] = _plotsOwnedByUser[msg.sender].length - 1;
+        }
+        
+        // Remove bundle from seller's ownership
+        uint256 lastBundleIndex = _bundlesOwnedByUser[seller].length - 1;
+        uint256 bundleIndex = _bundleIndexInOwnerArray[seller][bundleId];
+        
+        if (bundleIndex != lastBundleIndex) {
+            uint256 lastBundleId = _bundlesOwnedByUser[seller][lastBundleIndex];
+            _bundlesOwnedByUser[seller][bundleIndex] = lastBundleId;
+            _bundleIndexInOwnerArray[seller][lastBundleId] = bundleIndex;
+        }
+        
+        _bundlesOwnedByUser[seller].pop();
+        delete _bundleIndexInOwnerArray[seller][bundleId];
+        
+        // Remove from bundles for sale array
+        lastBundleIndex = _bundlesForSale.length - 1;
+        bundleIndex = _bundleIndexInSaleArray[bundleId];
+        
+        if (bundleIndex != lastBundleIndex) {
+            uint256 lastBundleId = _bundlesForSale[lastBundleIndex];
+            _bundlesForSale[bundleIndex] = lastBundleId;
+            _bundleIndexInSaleArray[lastBundleId] = bundleIndex;
+        }
+        
+        _bundlesForSale.pop();
+        delete _bundleIndexInSaleArray[bundleId];
+        
+        // Update bundle details
+        bundle.owner = msg.sender;
+        bundle.isForSale = false;
+        bundle.salePrice = 0;
+        
+        // Add bundle to buyer's ownership
+        _bundlesOwnedByUser[msg.sender].push(bundleId);
+        _bundleIndexInOwnerArray[msg.sender][bundleId] = _bundlesOwnedByUser[msg.sender].length - 1;
+        
+        // Update stats
+        totalResaleTransactions++;
+        totalBundlesSold++;
+        totalVolume += salePrice;
+        
+        emit PlotBundleSold(seller, msg.sender, bundleId, salePrice);
+    }
+    
+    // ============= READ FUNCTIONS (Unchanged) =============
+    
+    /**
+     * @dev Gets the current owner of a plot
+     */
+    function getPlotOwner(uint256 plotId) external view returns (address) {
+        require(plotId &lt; MAX_PLOTS, "Plot ID out of bounds");
+        return plots[plotId].owner;
+    }
+    
+    /**
+     * @dev Gets the owner of a plot at coordinates (x,y)
+     */
+    function getPlotOwnerByCoordinates(uint8 x, uint8 y) external view returns (address) {
+        uint256 plotId = coordinatesToPlotId(x, y);
+        return plots[plotId].owner;
+    }
+    
+    /**
+     * @dev Gets all plots owned by an address
+     */
+    function getPlotsByOwner(address owner) external view returns (uint256[] memory) {
+        return _plotsOwnedByUser[owner];
+    }
+    
+    /**
+     * @dev Gets all plots currently listed for sale
+     */
+    function getAllPlotsForSale() external view returns (uint256[] memory) {
+        return _plotsForSale;
+    }
+    
+    /**
+     * @dev Gets all plots listed for sale by a specific user
+     */
+    function getPlotsForSaleByOwner(address owner) external view returns (uint256[] memory) {
+        uint256[] memory userPlots = _plotsOwnedByUser[owner];
+        uint256 forSaleCount = 0;
+        
+        // Count plots for sale
+        for (uint256 i = 0; i &lt; userPlots.length; i++) {
+            if (plots[userPlots[i]].isForSale) {
+                forSaleCount++;
+            }
+        }
+        
+        // Create result array
+        uint256[] memory plotsForSale = new uint256[](forSaleCount);
+        uint256 currentIndex = 0;
+        
+        // Fill result array
+        for (uint256 i = 0; i &lt; userPlots.length; i++) {
+            if (plots[userPlots[i]].isForSale) {
+                plotsForSale[currentIndex] = userPlots[i];
+                currentIndex++;
+            }
+        }
+        
+        return plotsForSale;
+    }
+    
+    /**
+     * @dev Gets detailed information about a specific plot
+     */
+    function getPlotDetails(uint256 plotId) external view returns (
+        address owner,
+        uint8 x,
+        uint8 y,
+        bool isForSale,
+        uint256 salePrice,
+        uint256 purchaseTimestamp
+    ) {
+        require(plotId &lt; MAX_PLOTS, "Plot ID out of bounds");
+        Plot memory plot = plots[plotId];
+        
+        return (
+            plot.owner,
+            plot.x,
+            plot.y,
+            plot.isForSale,
+            plot.salePrice,
+            plot.purchaseTimestamp
+        );
+    }
+    
+    /**
+     * @dev Gets the percentage of plots owned by a specific address
+     */
+    function getOwnershipPercentage(address owner) external view returns (uint256) {
+        uint256 ownedCount = _plotsOwnedByUser[owner].length;
+        return (ownedCount * 10000) / MAX_PLOTS; // Returns basis points (1/100 of a percent)
+    }
+    
+    /**
+     * @dev Gets the total percentage of plots that have been sold
+     */
+    function getTotalSoldPercentage() external view returns (uint256) {
+        return (totalPlotsSold * 10000) / MAX_PLOTS; // Returns basis points (1/100 of a percent)
+    }
+
+    function getAllPlots(uint256 start, uint256 limit) external view returns (
+        uint256[] memory plotIds,
+        address[] memory owners,
+        uint256 ownershipCount
+    ) {
+        // Count total owned plots first
+        uint256 totalOwned = 0;
+        for (uint256 i = 0; i &lt; MAX_PLOTS; i++) {
+            if (plots[i].owner != address(0)) {
+                totalOwned++;
+            }
+        }
+        
+        // Handle empty case
+        if (totalOwned == 0) {
+            return (new uint256[](0), new address[](0), 0);
+        }
+        
+        // Validate pagination parameters
+        if (start &gt;= totalOwned) {
+            return (new uint256[](0), new address[](0), totalOwned);
+        }
+        
+        // Calculate how many results to return based on limit
+        uint256 resultCount = (start + limit &gt; totalOwned) ? (totalOwned - start) : limit;
+        
+        // Initialize return arrays
+        uint256[] memory resultPlotIds = new uint256[](resultCount);
+        address[] memory resultOwners = new address[](resultCount);
+        
+        // Fill return arrays
+        uint256 currentIndex = 0;
+        uint256 foundCount = 0;
+        
+        for (uint256 i = 0; i &lt; MAX_PLOTS &amp;&amp; currentIndex &lt; resultCount; i++) {
+            if (plots[i].owner != address(0)) {
+                if (foundCount &gt;= start) {
+                    resultPlotIds[currentIndex] = i;
+                    resultOwners[currentIndex] = plots[i].owner;
+                    currentIndex++;
+                }
+                foundCount++;
+            }
+        }
+        
+        return (resultPlotIds, resultOwners, totalOwned);
+    }
+    
+    /**
+     * @dev Gets the plots surrounding a specific plot
+     * @param plotId The plot ID to get neighbors for
+     * @return An array of up to 8 neighboring plot IDs (fewer if on edge)
+     */
+    function getNeighboringPlots(uint256 plotId) external pure returns (uint256[] memory) {
+        require(plotId &lt; MAX_PLOTS, "Plot ID out of bounds");
+        
+        (uint8 x, uint8 y) = plotIdToCoordinates(plotId);
+        uint256[] memory neighbors = new uint256[](8);
+        uint256 count = 0;
+        
+        // Check top-left
+        if (x &gt; 0 &amp;&amp; y &gt; 0) {
+            neighbors[count++] = coordinatesToPlotId(x - 1, y - 1);
+        }
+        
+        // Check top
+        if (y &gt; 0) {
+            neighbors[count++] = coordinatesToPlotId(x, y - 1);
+        }
+        
+        // Check top-right
+        if (x &lt; GRID_SIZE - 1 &amp;&amp; y &gt; 0) {
+            neighbors[count++] = coordinatesToPlotId(x + 1, y - 1);
+        }
+        
+        // Check left
+        if (x &gt; 0) {
+            neighbors[count++] = coordinatesToPlotId(x - 1, y);
+        }
+        
+        // Check right
+        if (x &lt; GRID_SIZE - 1) {
+            neighbors[count++] = coordinatesToPlotId(x + 1, y);
+        }
+        
+        // Check bottom-left
+        if (x &gt; 0 &amp;&amp; y &lt; GRID_SIZE - 1) {
+            neighbors[count++] = coordinatesToPlotId(x - 1, y + 1);
+        }
+        
+        // Check bottom
+        if (y &lt; GRID_SIZE - 1) {
+            neighbors[count++] = coordinatesToPlotId(x, y + 1);
+        }
+        
+        // Check bottom-right
+        if (x &lt; GRID_SIZE - 1 &amp;&amp; y &lt; GRID_SIZE - 1) {
+            neighbors[count++] = coordinatesToPlotId(x + 1, y + 1);
+        }
+        
+        // Resize array to actual number of neighbors
+        assembly {
+            mstore(neighbors, count)
+        }
+        
+        return neighbors;
+    }
+    
+    /**
+     * @dev Gets all bundles owned by an address
+     */
+    function getBundlesByOwner(address owner) external view returns (uint256[] memory) {
+        return _bundlesOwnedByUser[owner];
+    }
+    
+    /**
+     * @dev Gets all bundles currently listed for sale
+     */
+    function getAllBundlesForSale() external view returns (uint256[] memory) {
+        return _bundlesForSale;
+    }
+    
+    /**
+     * @dev Gets detailed information about a specific bundle
+     */
+    function getBundleDetails(uint256 bundleId) external view returns (
+        uint256[] memory plotIds,
+        address owner,
+        bool isForSale,
+        uint256 salePrice,
+        uint256 creationTimestamp
+    ) {
+        PlotBundle memory bundle = plotBundles[bundleId];
+        
+        return (
+            bundle.plotIds,
+            bundle.owner,
+            bundle.isForSale,
+            bundle.salePrice,
+            bundle.creationTimestamp
+        );
+    }
+    
+    /**
+     * @dev Checks if a plot is part of any bundle owned by an address
+     * @param plotId The plot ID to check
+     * @param owner The address to check bundles for
+     * @return bundleId Returns the bundle ID if found, 0 otherwise
+     */
+    function isPlotInOwnerBundle(uint256 plotId, address owner) external view returns (uint256) {
+        uint256[] memory ownerBundles = _bundlesOwnedByUser[owner];
+        
+        for (uint256 i = 0; i &lt; ownerBundles.length; i++) {
+            uint256 bundleId = ownerBundles[i];
+            if (_plotInBundle[bundleId][plotId]) {
+                return bundleId;
+            }
+        }
+        
+        return 0;
+    }
+    
+    /**
+     * @dev Allows contract owner to withdraw USDC tokens from the contract
+     * @notice Protected against reentrancy attacks
+     * @param amount The amount to withdraw, 0 for full balance
+     */
+    function withdrawUSDC(uint256 amount) external onlyOwner nonReentrant {
+        uint256 balance = usdcToken.balanceOf(address(this));
+        require(balance &gt; 0, "No USDC tokens available to withdraw");
+        
+        uint256 withdrawAmount = amount == 0 ? balance : amount;
+        require(withdrawAmount &lt;= balance, "Insufficient contract USDC balance");
+        
+        require(
+            usdcToken.transfer(owner(), withdrawAmount),
+            "USDC transfer failed"
+        );
+        
+        emit WithdrawExecuted(owner(), withdrawAmount, address(usdcToken));
+    }
+}</code></pre>
+        </div>
+      </div>
+    
+      </div>
+    </div>
+  
+        
+        
+        
+        
+<section class="scope-of-work-section">
+  <h2>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="section-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+    Scope of Work
+  </h2>
+  <div class="scope-of-work-content">
+    <p>This security audit covered the following areas:</p>
+    
+    <ul>
+      <li><strong>Code Review:</strong> A comprehensive review of the provided source code to identify security vulnerabilities, logic errors, and potential exploits.</li>
+      
+      <li><strong>Architecture Analysis:</strong> Evaluation of the overall system architecture, focusing on security implications and potential weaknesses.</li>
+      
+      <li><strong>Best Practices:</strong> Assessment of adherence to industry best practices and coding standards.</li>
+      
+      <li><strong>Gas Optimization:</strong> For smart contracts, analysis of gas usage and recommendations for optimization.</li>
+      
+      <li><strong>Testing Coverage:</strong> Review of the test suite to ensure adequate coverage of critical functionality.</li>
+    </ul>
+    
+    <p><strong>Files Analyzed:</strong> The audit covered 1 files, including all source code provided for review.</p>
+    
+    <p><strong>Audit Period:</strong> This audit was conducted on 3/30/2025.</p>
+  </div>
+</section>
+
+        
+        
+<section class="disclaimer-section">
+  <h2>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="section-icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+    Disclaimer
+  </h2>
+  <div class="disclaimer-content">
+    <p>This audit report is provided on an "as is" basis and is subject to the following limitations and disclaimers:</p>
+    
+    <ul>
+      <li><strong>Scope Limitations:</strong> This security audit is limited to the code and documentation provided to us at the time of the audit. Any subsequent changes to the codebase are not covered by this report.</li>
+      
+      <li><strong>No Guarantee of Complete Security:</strong> While we have made every effort to identify vulnerabilities and security issues, no audit can guarantee the complete absence of security vulnerabilities. New attack vectors and techniques may emerge after the audit is completed.</li>
+      
+      <li><strong>Smart Contract Risks:</strong> Smart contracts are subject to various risks, including but not limited to bugs, vulnerabilities, and exploits. Users should exercise caution and conduct their own due diligence before interacting with any smart contract.</li>
+      
+      <li><strong>Deployment Verification:</strong> This audit does not verify the correct deployment of the audited contracts. Users should independently verify that the deployed contract code matches the audited code before interacting with it.</li>
+      
+      <li><strong>No Investment Advice:</strong> This audit report does not constitute investment advice, an endorsement of the project, or a guarantee of the project's success or security.</li>
+    </ul>
+    
+    <p><strong>Verification of Deployed Addresses:</strong> Users should always verify that they are interacting with the correct contract addresses by checking official project documentation and communication channels. The contract addresses should be verified on the blockchain explorer to ensure they match the audited code.</p>
+    
+  </div>
+</section>
+
+      </main>
+      
+      <footer class="footer">
+        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo%20%282%29-zuWTBfp90yv1KCPqRFHeJ7tTDlgsAC.png" alt="MetaLabz Logo" class="footer-logo">
+        <p>© 2025 MetaLabz | MLZ Audit Suite</p>
+      </footer>
+    </div>
+  
+  
+</body></html>
