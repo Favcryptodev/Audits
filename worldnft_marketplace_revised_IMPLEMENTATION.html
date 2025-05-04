@@ -1,0 +1,1535 @@
+<html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLZ Audit Report - WorldNFT Marketplace</title>
+    <style>
+      :root {
+        --color-high: #FFDDDD;
+        --color-high-text: #CC0000;
+        --color-high-border: #FFAAAA;
+        --color-medium: #FFEEDD;
+        --color-medium-text: #CC6600;
+        --color-medium-border: #FFCC99;
+        --color-low: #FFFFDD;
+        --color-low-text: #999900;
+        --color-low-border: #EEEE99;
+        --color-info: #DDDDFF;
+        --color-info-text: #0000CC;
+        --color-info-border: #BBBBFF;
+        --color-primary: #8855DD;
+        --color-primary-light: #F0F0FF;
+        --color-primary-dark: #6633AA;
+        --color-text: #333333;
+        --color-text-light: #666666;
+        --color-border: #DDDDDD;
+        --color-background: #FFFFFF;
+        --color-header-bg: linear-gradient(to right, #20B2AA, #9370DB, #9932CC);
+        --color-code-bg: #F8F8F8;
+        --color-highlight: #FFFF99;
+        --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        --font-mono: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --radius-sm: 4px;
+        --radius-md: 6px;
+        --radius-lg: 8px;
+      }
+      
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      
+      body {
+        font-family: var(--font-sans);
+        line-height: 1.6;
+        color: var(--color-text);
+        background-color: #F5F5F5;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        background-color: var(--color-background);
+        box-shadow: var(--shadow-md);
+      }
+      
+      .header {
+        background: var(--color-header-bg);
+        color: white;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+      }
+      
+      .header h1 {
+        margin: 0;
+        font-size: 24px;
+        margin-left: 15px;
+      }
+      
+      .logo {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .content {
+        padding: 30px;
+      }
+      
+      .report-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+      
+      .report-title {
+        margin: 0 0 5px 0;
+        font-size: 24px;
+        color: var(--color-primary);
+      }
+      
+      .report-date {
+        color: var(--color-text-light);
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      
+      .project-logo {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+      }
+      
+      .project-description {
+        background-color: var(--color-primary-light);
+        padding: 15px;
+        border-radius: var(--radius-md);
+        margin-bottom: 30px;
+        border: 1px solid var(--color-border);
+      }
+      
+      h2 {
+        color: var(--color-primary);
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      
+      .section-icon {
+        color: var(--color-primary);
+      }
+      
+      .category-reports-section {
+        margin-bottom: 30px;
+      }
+      
+      .category-reports {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+      }
+      
+      .category-report {
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: 15px;
+        background-color: #F9F9F9;
+        transition: transform 0.2s, box-shadow 0.2s;
+      }
+      
+      .category-report:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+      
+      .category-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      
+      .category-name {
+        font-weight: bold;
+        text-transform: capitalize;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      
+      .category-icon {
+        color: var(--color-primary);
+      }
+      
+      .status-icon {
+        flex-shrink: 0;
+      }
+      
+      .status-icon.complete {
+        color: #22C55E;
+      }
+      
+      .status-icon.error {
+        color: #EF4444;
+      }
+      
+      .status-icon.pending {
+        color: #3B82F6;
+      }
+      
+      .issues-count, .error-message {
+        font-size: 13px;
+        margin-top: 5px;
+      }
+      
+      .error-message {
+        color: var(--color-high-text);
+      }
+      
+      .summary {
+        margin-bottom: 30px;
+      }
+      
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 15px;
+      }
+      
+      .summary-item {
+        padding: 20px;
+        border-radius: var(--radius-md);
+        text-align: center;
+        transition: transform 0.2s, box-shadow 0.2s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .summary-item:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+      
+      .summary-item.high {
+        background-color: var(--color-high);
+        border: 1px solid var(--color-high-border);
+      }
+      
+      .summary-item.medium {
+        background-color: var(--color-medium);
+        border: 1px solid var(--color-medium-border);
+      }
+      
+      .summary-item.low {
+        background-color: var(--color-low);
+        border: 1px solid var(--color-low-border);
+      }
+      
+      .summary-item.info {
+        background-color: var(--color-info);
+        border: 1px solid var(--color-info-border);
+      }
+      
+      .summary-icon {
+        margin-bottom: 10px;
+      }
+      
+      .summary-icon.high {
+        color: var(--color-high-text);
+      }
+      
+      .summary-icon.medium {
+        color: var(--color-medium-text);
+      }
+      
+      .summary-icon.low {
+        color: var(--color-low-text);
+      }
+      
+      .summary-icon.info {
+        color: var(--color-info-text);
+      }
+      
+      .summary-label {
+        font-weight: bold;
+        font-size: 14px;
+      }
+      
+      .summary-count {
+        font-size: 28px;
+        font-weight: bold;
+        margin-top: 5px;
+      }
+      
+      .findings-section h2 {
+        color: var(--color-primary);
+        margin-bottom: 20px;
+      }
+      
+      .finding {
+        margin-bottom: 40px;
+        padding-bottom: 30px;
+        border-bottom: 1px solid var(--color-border);
+      }
+      
+      .finding-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        align-items: center;
+      }
+      
+      .severity-container {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+      
+      .severity {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: var(--radius-sm);
+        font-size: 12px;
+        font-weight: bold;
+      }
+      
+      .severity.high {
+        background-color: var(--color-high);
+        color: var(--color-high-text);
+      }
+      
+      .severity.medium {
+        background-color: var(--color-medium);
+        color: var(--color-medium-text);
+      }
+      
+      .severity.low {
+        background-color: var(--color-low);
+        color: var(--color-low-text);
+      }
+      
+      .severity.info {
+        background-color: var(--color-info);
+        color: var(--color-info-text);
+      }
+      
+      .icon {
+        flex-shrink: 0;
+      }
+      
+      .id {
+        color: var(--color-text-light);
+        font-size: 12px;
+        font-family: var(--font-mono);
+        background-color: #F0F0F0;
+        padding: 2px 6px;
+        border-radius: var(--radius-sm);
+      }
+      
+      .title {
+        margin: 0 0 15px 0;
+        font-size: 20px;
+        color: var(--color-primary-dark);
+      }
+      
+      .description {
+        margin-bottom: 20px;
+        white-space: pre-wrap;
+        line-height: 1.6;
+      }
+      
+      .details {
+        display: grid;
+        gap: 20px;
+      }
+      
+      .detail {
+        background-color: #FAFAFA;
+        padding: 15px;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--color-border);
+      }
+      
+      .detail-label {
+        font-size: 12px;
+        font-weight: bold;
+        color: var(--color-text-light);
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        text-transform: uppercase;
+      }
+      
+      .detail-icon {
+        color: var(--color-primary);
+      }
+      
+      .detail-value {
+        line-height: 1.6;
+      }
+      
+      .code-container {
+        background-color: var(--color-code-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        margin: 15px 0;
+        overflow: hidden;
+      }
+      
+      .code-header {
+        background-color: #E8E8E8;
+        padding: 8px 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        font-family: var(--font-mono);
+        color: var(--color-text-light);
+        border-bottom: 1px solid var(--color-border);
+      }
+      
+      .file-name {
+        font-weight: bold;
+      }
+      
+      .line-range {
+        background-color: #D8D8D8;
+        padding: 2px 6px;
+        border-radius: var(--radius-sm);
+      }
+      
+      .code-snippet {
+        padding: 10px;
+        overflow-x: auto;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      
+      .code-table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      
+      .line-number {
+        text-align: right;
+        padding: 0 10px;
+        color: #999;
+        border-right: 1px solid #DDD;
+        user-select: none;
+        width: 1%;
+        white-space: nowrap;
+      }
+      
+      .code-line {
+        padding: 0 10px;
+        white-space: pre;
+      }
+      
+      .highlighted-line {
+        background-color: var(--color-highlight);
+      }
+      
+      .highlighted-line .line-number {
+        font-weight: bold;
+        color: #666;
+      }
+      
+      .next-steps {
+        background-color: var(--color-primary-light);
+        padding: 20px;
+        border-radius: var(--radius-md);
+        margin-top: 30px;
+        border: 1px solid var(--color-border);
+      }
+      
+      .next-steps h2 {
+        color: var(--color-primary);
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+      
+      .social-links {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid var(--color-border);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+      
+      .social-link {
+        color: var(--color-primary);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        padding: 8px 12px;
+        border-radius: var(--radius-md);
+        background-color: var(--color-primary-light);
+        transition: background-color 0.2s;
+      }
+      
+      .social-link:hover {
+        background-color: #E8E0FF;
+      }
+      
+      .social-icon {
+        color: var(--color-primary);
+      }
+      
+      .source-code-section {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid var(--color-border);
+      }
+      
+      .source-files-container {
+        display: grid;
+        gap: 20px;
+      }
+      
+      .source-file {
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+      }
+      
+      .source-file-header {
+        background-color: #E8E8E8;
+        padding: 10px 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-family: var(--font-mono);
+        font-size: 14px;
+        font-weight: bold;
+        border-bottom: 1px solid var(--color-border);
+      }
+      
+      .file-icon {
+        color: var(--color-primary);
+      }
+      
+      .source-file-content {
+        max-height: 400px;
+        overflow-y: auto;
+        background-color: var(--color-code-bg);
+      }
+      
+      .source-file-content pre {
+        margin: 0;
+        padding: 15px;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        line-height: 1.5;
+        white-space: pre-wrap;
+      }
+      
+      .scope-of-work-section,
+      .disclaimer-section {
+        margin-top: 40px;
+        padding-top: 20px;
+        border-top: 1px solid var(--color-border);
+      }
+      
+      .scope-of-work-content,
+      .disclaimer-content {
+        margin-top: 15px;
+        line-height: 1.6;
+      }
+      
+      .scope-of-work-content ul,
+      .disclaimer-content ul {
+        margin-left: 20px;
+        margin-bottom: 15px;
+      }
+      
+      .scope-of-work-content li,
+      .disclaimer-content li {
+        margin-bottom: 8px;
+      }
+      
+      .scope-of-work-content strong,
+      .disclaimer-content strong {
+        font-weight: bold;
+      }
+
+      .methodology-section {
+        margin-bottom: 30px;
+        background-color: #f8f9fa;
+        border-radius: var(--radius-md);
+        padding: 20px;
+        border: 1px solid var(--color-border);
+      }
+
+      .methodology-content {
+        margin-top: 15px;
+      }
+
+      .methodology-content h3 {
+        font-size: 16px;
+        margin-bottom: 10px;
+        color: var(--color-primary-dark);
+      }
+
+      .methodology-content ul {
+        margin-left: 20px;
+        margin-bottom: 15px;
+      }
+
+      .methodology-content li {
+        margin-bottom: 8px;
+      }
+
+      .methodology-content strong {
+        font-weight: bold;
+      }
+      
+      .footer {
+        text-align: center;
+        padding: 20px;
+        background-color: #F0F0F0;
+        color: var(--color-text-light);
+        font-size: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+      }
+      
+      .footer-logo {
+        width: 24px;
+        height: 24px;
+      }
+      
+      @media print {
+        body {
+          background-color: white;
+        }
+        
+        .container {
+          box-shadow: none;
+          max-width: 100%;
+        }
+        
+        .source-file-content {
+          max-height: none;
+        }
+      }
+      
+      @media (max-width: 768px) {
+        .content {
+          padding: 20px 15px;
+        }
+        
+        .summary-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        
+        .category-reports {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  <style>
+          .revision-notes-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--color-border);
+            background-color: #f0f7ff;
+            padding: 20px;
+            border-radius: var(--radius-md);
+            border: 1px solid #d1e0ff;
+          }
+          .revision-notes-content {
+            margin-top: 15px;
+            line-height: 1.6;
+          }
+          .comment-section {
+            margin-top: 15px;
+            background-color: #f0f7ff !important;
+            border-left: 3px solid #3b82f6 !important;
+          }
+          .comment-text {
+            font-style: italic;
+          }
+          .severity-revision {
+            margin-top: 15px;
+            background-color: #f0f7ff !important;
+            border-left: 3px solid #3b82f6 !important;
+          }
+          .original-severity {
+            display: inline-block;
+            margin-right: 15px;
+          }
+          .revised-severity {
+            display: inline-block;
+          }
+          .revision-reason {
+            margin-top: 8px;
+            font-style: italic;
+            color: #555;
+          }
+          .severity.high {
+            color: #cc0000;
+          }
+          .severity.medium {
+            color: #cc6600;
+          }
+          .severity.low {
+            color: #999900;
+          }
+          .severity.informational {
+            color: #0000cc;
+          }
+        </style></head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo%20%282%29-zuWTBfp90yv1KCPqRFHeJ7tTDlgsAC.png" alt="MetaLabz Logo" class="logo">
+        <h1>MLZ Audit Report</h1>
+      </header>
+      
+      <main class="content">
+        <div class="report-header">
+          <div>
+            <h2 class="report-title">WorldNFT Marketplace (Revised)</h2>
+            <p class="report-date">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="date-icon"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+              Generated on 5/4/2025
+            <span class="revision-date"> | Revised on 5/4/2025</span></p>
+          </div>
+          <img src="data:image/webp;base64,UklGRgQFAABXRUJQVlA4WAoAAAAQAAAALwAALwAAQUxQSBQCAAABoGxtmyHZ+iL+bdu2bXvvK7BtjTy0R7b30N7Htm3bPhkR/3fQnYgriIgJQFYRZBRBoWKAyv0W7b/x5AsvPnXz4JIBVQAj+YmFjDrysTLtp8fHlYGVfIxAJj5HpXrnS3ReqXxxehmIycEI+j1JDS4wdXBB+fwQiM1kUWazp/fMMXjqrrKQDBY1btF75uwdH6wHSWXR9DUmytw14butISksGr5Fx0IdP2gBW4pBhUfoWLDj81VgShIcZ8LCE56DLUEwmZ4ROs6BADCo9TFDDIFfNIQBBJvpGKXjPggMGn5DjUP5U0tYwXo6Ruq4BQL7EkMsgW+XB/pTGW3gKGATXTyO24DL9PF43ody7zPEE/hFlea/UuNR/t2hJ6NSDhhMjYiBw4czMKqRA6ka1bDugRGpsl+jn6LiH63tGwzxBH5UARfp4vG8AqyJyXET0CmhRqPsC4OH6WMJfA4QzI/HcxXEoOqHDHEoP68FA8Fyujgc10IAg7LP0ccQ+HolGACCYSFoceo5AYL/CzbSFZdwMwQlW1xgUlTCS8agVINyN5kUk/CBSkgBg4pXmYT8guOdqrBIa43sY3Cakws8XB4W6Y1g0jcMTrOpC/xhBsQgqxE0OOKozgdNod4pw+mmEIMcxaD7qV+pVFdqoPL3C31hBPlaAZosv+97pvzhwdXNAbHI3QqAWsOWbDtw/MSB7ctG1AEgFukBVlA4IMoCAAAwDACdASowADAAPok0lEelIqIhMdzMAKARCWwArDlBUZ2Zrzc4ZtlOec9AG8R+gB+s3Wd/uIkQVxGrj/HudFz0fT2/pBrV9hatYPVCbEGvmpiVc2y7pAHH+uKanTlxi2nZPX+6KiZqLsAAANbnXWpGcSmB683a3sZd2VRxDqd9TGgnKn3MaPdS2owhHKybhfoM3mlKA5BP9SlXX2PzzwMYdnppxcMrEZ6wHvCTx/DensbGvoY066MDt0aBatQNDWPQrT0U/ggJrXMSn5kcJayGFjnc+H4jWImOAjt8hZzXa2YTF733YnwPnaYUHColVXvYFJR/00nVd/eKgJHCHb1Q2V3mEpaj6X5v3fFx9KzwlA60yo9mualy3wI+c8ou0AeFUXjhaWFh3t3JdZ73cXsR68j3CmU85XyJpASFuI13PObl95KKlh7+oeAOcW2UJiwd1pLywMtYH4JYvv520/TD4F8fXt/Zx5Lu/kNudNZETPw5izELu4dlOuXpmKdTeYBkoNGGvclbe+nqK2jx4LlHLcFBZvNeiMjHUnq3PWYixL53kuv/eAKejxC2xR5/JKMjF7xZ2DaeVJu7uefwC0IMFvDlEbrVeMJOUbQjfcl19RSkYkU6EEuQGulSfk71mUHNLVHJSOnspXFPsIyLt9eOxqDUo8kBhrbp0MPbnxR7EzsH/rObeGH8I3/CF/V/sWuqFZdF9Ws64PS5bVFH3CNljPA0OMWnHjo/cF5qdfFymf6pVat/W4c+vtR/xadNet2cqNr2BigKx4XdhQxmDzB/B3Smf+4qPjHPmsaMssTARtwfiswMULC9+P+W3WeigVcUhC88E8h1BvW/4v5hU458HdBNouKx/B/RQ2DIWHNCb/9NCSIAASEN5waXdLPv5Hjge/d9KXSNrwKz3XPRlxkvjWNGmd5bvnL0RZWSIFN9Hf6a53yaV77kAAA=" alt="Project Logo" class="project-logo">
+        </div>
+        
+        
+    <div class="project-description">
+      <p>World NFT Marketplace is the premier destination for NFTs across all EVM chains.</p>
+    </div>
+  
+        
+        
+<section class="methodology-section">
+  <h2>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="section-icon"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+    Audit Methodology
+  </h2>
+  <div class="methodology-content">
+    <p>This security audit was conducted using a combination of automated and manual analysis techniques to identify vulnerabilities and security issues in the provided code.</p>
+    
+    <h3>Our approach included:</h3>
+    
+    <ul>
+      <li><strong>Static Analysis:</strong> Automated scanning tools were used to identify common vulnerabilities, coding errors, and security anti-patterns.</li>
+      
+      <li><strong>Manual Code Review:</strong> Experienced security auditors performed a line-by-line review of the codebase to identify logical flaws, access control issues, and other vulnerabilities that automated tools might miss.</li>
+      
+      <li><strong>Architecture Analysis:</strong> The overall system design was evaluated for security implications, focusing on the interaction between components and potential attack vectors.</li>
+      
+      <li><strong>Gas Optimization:</strong> For smart contracts, we analyzed gas usage patterns and identified opportunities for optimization.</li>
+      
+      <li><strong>Best Practices Review:</strong> The code was evaluated against industry best practices and standards for secure development.</li>
+    </ul>
+    
+    <p><strong>Severity Classification:</strong></p>
+    <ul>
+      <li><strong>High:</strong> Vulnerabilities that can lead to asset loss, significant data compromise, or other severe impacts.</li>
+      <li><strong>Medium:</strong> Vulnerabilities that could potentially lead to asset loss under specific circumstances or represent significant flaws in the system's design.</li>
+      <li><strong>Low:</strong> Vulnerabilities that are limited in scope or require unusual circumstances to exploit.</li>
+      <li><strong>Informational:</strong> Issues that do not pose an immediate security risk but should be addressed as best practice.</li>
+    </ul>
+  </div>
+</section>
+
+        
+        
+        
+        <section class="summary">
+          <h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="section-icon"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>
+            Executive Summary
+          </h2>
+          <div class="summary-grid">
+            <div class="summary-item high">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="summary-icon high"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              <div class="summary-label">High</div>
+              <div class="summary-count">1</div>
+            </div>
+            <div class="summary-item medium">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="summary-icon medium"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+              <div class="summary-label">Medium</div>
+              <div class="summary-count">2</div>
+            </div>
+            <div class="summary-item low">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="summary-icon low"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+              <div class="summary-label">Low</div>
+              <div class="summary-count">2</div>
+            </div>
+            <div class="summary-item info">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="summary-icon info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              <div class="summary-label">Info</div>
+              <div class="summary-count">1</div>
+            </div>
+          </div>
+        </section>
+        
+        <section class="findings-section">
+          <h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="section-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            Key Findings
+          </h2>
+          
+    <div class="finding informational">
+      <div class="finding-header">
+        <div class="severity-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          <span class="severity informational">Informational</span>
+        </div>
+        <span class="id">H-01</span>
+      </div>
+      <h3 class="title">Reentrancy Vulnerability</h3>
+      <div class="description">The `batchMint` function is vulnerable to reentrancy attacks. The `_distributeFees` function is called before the tokens are minted, which could allow an attacker to repeatedly call the `batchMint` function and drain the contract's funds.</div>
+      
+      <div class="details"><div class="detail severity-revision" style="background-color: rgb(240, 247, 255); border-left: 3px solid rgb(59, 130, 246);">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            REVISED SEVERITY
+          </div>
+          <div class="detail-value">
+            <span class="original-severity">Original: <strong>High</strong></span>
+            <span class="revised-severity">Revised: <strong class="severity info">Informational</strong></span>
+            <div class="revision-reason">This contract doesn't hold funds at any point.</div>
+          </div>
+        </div>
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            LOCATION
+          </div>
+          <div class="detail-value">Line 174-188</div>
+        </div>
+        
+        
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            IMPACT
+          </div>
+          <div class="detail-value">An attacker could repeatedly call the `batchMint` function and drain the contract's funds.</div>
+        </div>
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            RECOMMENDATION
+          </div>
+          <div class="detail-value">Implement the Checks-Effects-Interactions pattern by minting the tokens first, then distributing the fees. This will prevent reentrancy attacks.</div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="finding low">
+      <div class="finding-header">
+        <div class="severity-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <span class="severity low">Low</span>
+        </div>
+        <span class="id">M-01</span>
+      </div>
+      <h3 class="title">Lack of Input Validation</h3>
+      <div class="description">The `initialize` function does not perform sufficient input validation. The `_creator` parameter is not checked for the zero address, and the `_creatorFee` parameter is not checked to be within the valid range (0-10%).</div>
+      
+      <div class="details"><div class="detail severity-revision" style="background-color: rgb(240, 247, 255); border-left: 3px solid rgb(59, 130, 246);">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+            </svg>
+            REVISED SEVERITY
+          </div>
+          <div class="detail-value">
+            <span class="original-severity">Original: <strong>Medium</strong></span>
+            <span class="revised-severity">Revised: <strong class="severity low">Low</strong></span>
+            <div class="revision-reason">the verification is done in the dApp before any creation is called via the factory for this implementation</div>
+          </div>
+        </div>
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            LOCATION
+          </div>
+          <div class="detail-value">Line 92-105</div>
+        </div>
+        
+        
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            IMPACT
+          </div>
+          <div class="detail-value">An attacker could provide invalid parameters during contract initialization, leading to unexpected behavior or vulnerabilities.</div>
+        </div>
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            RECOMMENDATION
+          </div>
+          <div class="detail-value">Add input validation to ensure that the `_creator` parameter is not the zero address and the `_creatorFee` parameter is within the valid range (0-10%).</div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="finding medium">
+      <div class="finding-header">
+        <div class="severity-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          <span class="severity medium">Medium</span>
+        </div>
+        <span class="id">M-02</span>
+      </div>
+      <h3 class="title">Potential Integer Overflow/Underflow</h3>
+      <div class="description">The contract uses the `Counters.Counter` library to manage the token IDs, which is susceptible to integer overflow/underflow vulnerabilities. If the token ID counter reaches the maximum value of `type(uint256).max`, the next increment will cause an overflow, leading to unexpected behavior.</div>
+      
+      <div class="details">
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            LOCATION
+          </div>
+          <div class="detail-value">Line 35, 207</div>
+        </div>
+        
+        
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            IMPACT
+          </div>
+          <div class="detail-value">An attacker could exploit the integer overflow/underflow vulnerability to mint tokens beyond the maximum supply or cause other unexpected behavior.</div>
+        </div>
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            RECOMMENDATION
+          </div>
+          <div class="detail-value">Implement additional checks to ensure that the token ID counter does not exceed the maximum value of `type(uint256).max`. Consider using a library that provides safe arithmetic operations, such as OpenZeppelin's `SafeMath` library.</div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="finding low">
+      <div class="finding-header">
+        <div class="severity-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="icon"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          <span class="severity low">Low</span>
+        </div>
+        <span class="id">L-01</span>
+      </div>
+      <h3 class="title">Lack of Input Validation in `setTokenURI`</h3>
+      <div class="description">The `setTokenURI` function does not perform input validation to ensure that the `tokenId` parameter is valid (i.e., the token exists).</div>
+      
+      <div class="details">
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            LOCATION
+          </div>
+          <div class="detail-value">Line 138-142</div>
+        </div>
+        
+        
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            IMPACT
+          </div>
+          <div class="detail-value">An attacker could provide an invalid `tokenId` and potentially cause the contract to revert or behave unexpectedly.</div>
+        </div>
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            RECOMMENDATION
+          </div>
+          <div class="detail-value">Add a check to ensure that the `tokenId` parameter is valid (i.e., the token exists) before updating the token URI.</div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="finding low">
+      <div class="finding-header">
+        <div class="severity-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="icon"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+          <span class="severity low">Low</span>
+        </div>
+        <span class="id">L-02</span>
+      </div>
+      <h3 class="title">Lack of Input Validation in `updateMaxBatchSize`</h3>
+      <div class="description">The `updateMaxBatchSize` function does not perform input validation to ensure that the `_maxBatchSize` parameter is greater than zero.</div>
+      
+      <div class="details">
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            LOCATION
+          </div>
+          <div class="detail-value">Line 288-291</div>
+        </div>
+        
+        
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            IMPACT
+          </div>
+          <div class="detail-value">An attacker could provide an invalid `_maxBatchSize` parameter, leading to unexpected behavior or reverts.</div>
+        </div>
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            RECOMMENDATION
+          </div>
+          <div class="detail-value">Add a check to ensure that the `_maxBatchSize` parameter is greater than zero.</div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="finding info">
+      <div class="finding-header">
+        <div class="severity-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+          <span class="severity info">Informational</span>
+        </div>
+        <span class="id">I-01</span>
+      </div>
+      <h3 class="title">Lack of Gas Optimization</h3>
+      <div class="description">The `walletOfOwner` function could be optimized to reduce gas consumption. The current implementation iterates through all the tokens to find the ones owned by the specified address, which can be expensive for users with a large number of tokens.</div>
+      
+      <div class="details">
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            LOCATION
+          </div>
+          <div class="detail-value">Line 311-318</div>
+        </div>
+        
+        
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+            IMPACT
+          </div>
+          <div class="detail-value">Users with a large number of tokens may experience high gas costs when calling the `walletOfOwner` function.</div>
+        </div>
+        
+        <div class="detail">
+          <div class="detail-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="detail-icon"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            RECOMMENDATION
+          </div>
+          <div class="detail-value">Consider using a more efficient data structure, such as a mapping, to store the token IDs owned by each address. This would allow the `walletOfOwner` function to retrieve the tokens more efficiently.</div>
+        </div>
+      </div>
+    </div>
+  
+        </section>
+        
+        <section class="next-steps">
+          <h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="section-icon"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            Next Steps
+          </h2>
+          <p>This audit report identifies several security issues that should be addressed before deployment to production. We recommend fixing all high and medium severity issues and conducting a follow-up audit to verify the remediation.</p>
+        </section>
+        
+        
+    <div class="source-code-section">
+      <h2>
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="section-icon"><path d="M16 18l6-6-6-6"></path><path d="M8 6l-6 6 6 6"></path></svg>
+        Source Code
+      </h2>
+      <div class="source-files-container">
+        
+      <div class="source-file">
+        <div class="source-file-header">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="file-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+          <span class="source-file-name">pasted-code.txt</span>
+        </div>
+        <div class="source-file-content">
+          <pre><code>// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.28;
+
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Counters.sol";
+import "@openzeppelin/contracts/interfaces/IERC2981.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/Strings.sol";
+
+/**
+ * @title CustomERC721
+ * @dev ERC721 token with minting capabilities and royalty support
+ * Modified to support initialization for minimal proxy cloning
+ */
+contract CustomERC721 is ERC721, Ownable, IERC2981, ReentrancyGuard {
+    using Counters for Counters.Counter;
+    using Strings for uint256;
+
+    Counters.Counter private _tokenIdCounter;
+
+    string private _baseURIValue;
+    string public baseExtension = ".json";
+    uint256 public maxSupply;
+    uint256 public mintFee;
+    uint256 public creatorFee;
+    uint256 public mintStartTime;
+    bool public isMintingPaused;
+    bool public batchMintingAllowed = false;
+    uint256 public maxBatchSize = 10;
+    bool private _initialized = false;
+
+    address public constant PLATFORM_ADDRESS = 0xf2aAb1c4eaFaa2f4f359c55F071128E87bCA15A2;
+    uint256 public constant PLATFORM_FEE_PERCENT = 800;
+
+    address public creator;
+    mapping(uint256 =&gt; string) private _tokenURIs;
+    mapping(address =&gt; bool) public isExcludedFromFee;
+
+    event Minted(address indexed minter, uint256 tokenId);
+    event BaseURIUpdated(string newBaseURI);
+    event BaseExtensionUpdated(string newBaseExtension);
+    event CreatorFeeUpdated(uint256 newCreatorFee);
+    event BatchMintingAllowedUpdated(bool allowed);
+    event MaxBatchSizeUpdated(uint256 maxBatchSize);
+    event Initialized(address indexed creator);
+
+    /**
+     * @dev Constructor for the implementation contract
+     * Note: When using minimal proxies, this constructor only runs for the implementation contract,
+     * not for the clones. Use initialize() for clones.
+     */
+    constructor() ERC721("Implementation", "IMPL") Ownable(msg.sender) {
+        // This constructor is only for the implementation contract
+        // No need to initialize values as they will never be used
+    }
+
+    /**
+     * @dev Initializes the contract with required values. Used by clones.
+     * @param _name Name of the NFT collection
+     * @param _symbol Symbol of the NFT collection
+     * @param _initialBaseURI Base URI for token metadata
+     * @param _maxSupply Maximum supply (0 for unlimited)
+     * @param _mintFee Fee required to mint a token
+     * @param _creatorFee Royalty percentage in basis points (100 = 1%)
+     * @param _mintStartTime Time when minting is allowed to start
+     * @param _creator Address of the collection creator
+     */
+    function initialize(
+        string memory _name,
+        string memory _symbol,
+        string memory _initialBaseURI,
+        uint256 _maxSupply,
+        uint256 _mintFee,
+        uint256 _creatorFee,
+        uint256 _mintStartTime,
+        address _creator
+    ) external {
+        require(!_initialized, "Contract already initialized");
+        require(_creator != address(0), "Creator cannot be zero address");
+        require(_creatorFee &lt;= 1000, "Creator fee cannot exceed 10%");
+        
+        // Initialize the ERC721 with name and symbol
+        _initializeERC721(_name, _symbol);
+        
+        // Initialize the Ownable contract
+        _transferOwnership(msg.sender);
+        
+        _baseURIValue = _initialBaseURI;
+        maxSupply = _maxSupply;
+        mintFee = _mintFee;
+        creatorFee = _creatorFee;
+        mintStartTime = _mintStartTime;
+        creator = _creator;
+        _initialized = true;
+        
+        emit Initialized(_creator);
+    }
+
+    /**
+     * @dev Internal function to initialize the ERC721 contract
+     * This is needed because ERC721 doesn't have an initialize function
+     */
+    function _initializeERC721(string memory name_, string memory symbol_) internal {
+        _name = name_;
+        _symbol = symbol_;
+    }
+
+    modifier mintingActive() {
+        require(block.timestamp &gt;= mintStartTime, "Minting has not started yet");
+        require(!isMintingPaused, "Minting is currently paused");
+        _;
+    }
+
+    modifier supplyAvailable(uint256 amount) {
+        require(maxSupply == 0 || _tokenIdCounter.current() + amount &lt;= maxSupply, "Exceeds max supply");
+        _;
+    }
+
+    modifier onlyInitialized() {
+        require(_initialized, "Contract not initialized");
+        _;
+    }
+
+    function _baseURI() internal view override returns (string memory) {
+        return _baseURIValue;
+    }
+
+    function totalSupply() public view returns (uint256) {
+        return _tokenIdCounter.current();
+    }
+
+    function setBaseExtension(string memory _newBaseExtension) public onlyOwner onlyInitialized {
+        baseExtension = _newBaseExtension;
+        emit BaseExtensionUpdated(_newBaseExtension);
+    }
+
+    function _setTokenURI(uint256 tokenId, string memory _tokenURI) internal {
+        require(_ownerOf(tokenId) != address(0), "URI set of nonexistent token");
+        _tokenURIs[tokenId] = _tokenURI;
+    }
+
+    function setTokenURI(uint256 tokenId, string memory _tokenURI) external onlyOwner onlyInitialized {
+        _setTokenURI(tokenId, _tokenURI);
+    }
+
+    function tokenURI(uint256 tokenId) public view virtual override onlyInitialized returns (string memory) {
+        require(_ownerOf(tokenId) != address(0), "URI query for nonexistent token");
+
+        string memory _tokenURI = _tokenURIs[tokenId];
+        string memory base = _baseURI();
+
+        if (bytes(_tokenURI).length == 0) {
+            return string(abi.encodePacked(base, tokenId.toString(), baseExtension));
+        }
+
+        return string(abi.encodePacked(base, _tokenURI));
+    }
+
+    function _distributeFees(uint256 feeAmount) internal {
+        uint256 platformShare = (feeAmount * PLATFORM_FEE_PERCENT) / 10000;
+        uint256 creatorShare = (feeAmount * creatorFee) / 10000;
+        uint256 ownerShare = feeAmount - platformShare - creatorShare;
+
+        (bool platformSuccess, ) = payable(PLATFORM_ADDRESS).call{value: platformShare}("");
+        (bool creatorSuccess, ) = payable(creator).call{value: creatorShare}("");
+        (bool ownerSuccess, ) = payable(owner()).call{value: ownerShare}("");
+
+        require(platformSuccess, "Platform fee transfer failed");
+        require(creatorSuccess, "Creator fee transfer failed");
+        require(ownerSuccess, "Owner fee transfer failed");
+    }
+
+    function mint() public payable mintingActive supplyAvailable(1) nonReentrant onlyInitialized {
+        if (!isExcludedFromFee[msg.sender]) {
+            require(msg.value &gt;= mintFee, "Insufficient ETH: mint fee is required");
+            _distributeFees(mintFee);
+        }
+        _mintToken(msg.sender);
+    }
+
+    function batchMint(uint256 amount) public payable mintingActive supplyAvailable(amount) nonReentrant onlyInitialized {
+        require(batchMintingAllowed, "Batch minting is disabled");
+        require(amount &gt; 0 &amp;&amp; amount &lt;= maxBatchSize, "Invalid batch size");
+
+        uint256 totalMintFee = isExcludedFromFee[msg.sender] ? 0 : mintFee * amount;
+        require(msg.value &gt;= totalMintFee, "Insufficient ETH: total mint fee required");
+
+        if (!isExcludedFromFee[msg.sender]) {
+            _distributeFees(totalMintFee);
+        }
+
+        for (uint256 i = 0; i &lt; amount; i++) {
+            _mintToken(msg.sender);
+        }
+    }
+
+    function _mintToken(address to) internal {
+        require(_tokenIdCounter.current() &lt; type(uint256).max, "Counter overflow");
+        _tokenIdCounter.increment();
+        uint256 tokenId = _tokenIdCounter.current();
+        _safeMint(to, tokenId);
+        emit Minted(to, tokenId);
+    }
+
+    function totalMinted() public view returns (uint256) {
+        return _tokenIdCounter.current();
+    }
+
+    function updateBaseURI(string memory _newBaseURI) external onlyOwner onlyInitialized {
+        _baseURIValue = _newBaseURI;
+        emit BaseURIUpdated(_newBaseURI);
+    }
+
+    function updateCreatorFee(uint256 _creatorFee) external onlyOwner onlyInitialized {
+        require(_creatorFee &lt;= 1000, "Creator fee cannot exceed 10%");
+        creatorFee = _creatorFee;
+        emit CreatorFeeUpdated(_creatorFee);
+    }
+
+    function pauseMinting() external onlyOwner onlyInitialized {
+        isMintingPaused = true;
+    }
+
+    function unpauseMinting() external onlyOwner onlyInitialized {
+        isMintingPaused = false;
+    }
+
+    function setBatchMintingAllowed(bool allowed) external onlyOwner onlyInitialized {
+        batchMintingAllowed = allowed;
+        emit BatchMintingAllowedUpdated(allowed);
+    }
+
+    function updateMaxBatchSize(uint256 _maxBatchSize) external onlyOwner onlyInitialized {
+        require(_maxBatchSize &gt; 0, "Max batch size must be greater than zero");
+        maxBatchSize = _maxBatchSize;
+        emit MaxBatchSizeUpdated(_maxBatchSize);
+    }
+
+    function addToFeeExclusion(address _address) external onlyOwner onlyInitialized {
+        isExcludedFromFee[_address] = true;
+    }
+
+    function removeFromFeeExclusion(address _address) external onlyOwner onlyInitialized {
+        isExcludedFromFee[_address] = false;
+    }
+
+    // Common utility functions
+    function walletOfOwner(address _owner) public view onlyInitialized returns (uint256[] memory) {
+        uint256 ownerTokenCount = balanceOf(_owner);
+        uint256[] memory tokenIds = new uint256[](ownerTokenCount);
+        for (uint256 i = 0; i &lt; ownerTokenCount; i++) {
+            tokenIds[i] = tokenOfOwnerByIndex(_owner, i);
+        }
+        return tokenIds;
+    }
+
+    function withdrawAll() public onlyOwner onlyInitialized {
+        uint256 balance = address(this).balance;
+        require(balance &gt; 0, "No balance to withdraw");
+        (bool success, ) = payable(owner()).call{value: balance}("");
+        require(success, "Withdrawal failed");
+    }
+
+    function setMintFee(uint256 _mintFee) public onlyOwner onlyInitialized {
+        mintFee = _mintFee;
+    }
+
+    function setMaxSupply(uint256 _maxSupply) public onlyOwner onlyInitialized {
+        require(_maxSupply &gt;= totalSupply(), "New max supply must be &gt;= current supply");
+        maxSupply = _maxSupply;
+    }
+
+    function setMintStartTime(uint256 _mintStartTime) public onlyOwner onlyInitialized {
+        mintStartTime = _mintStartTime;
+    }
+
+    // Emergency functions
+    function emergencyPause() public onlyOwner onlyInitialized {
+        isMintingPaused = true;
+    }
+
+    function emergencyUnpause() public onlyOwner onlyInitialized {
+        isMintingPaused = false;
+    }
+
+    function isApprovedForAll(
+        address owner,
+        address operator
+    ) public view override onlyInitialized returns (bool) {
+        return super.isApprovedForAll(owner, operator);
+    }
+
+    function tokenOfOwnerByIndex(
+        address owner,
+        uint256 index
+    ) public view onlyInitialized returns (uint256) {
+        require(index &lt; balanceOf(owner), "Index out of bounds");
+        uint256 count = 0;
+        for (uint256 i = 1; i &lt;= _tokenIdCounter.current(); i++) {
+            if (_ownerOf(i) == owner) {
+                if (count == index) {
+                    return i;
+                }
+                count++;
+            }
+        }
+        revert("Token not found");
+    }
+
+    function burn(uint256 tokenId) public onlyInitialized {
+        address owner = ownerOf(tokenId);
+        require(
+            _msgSender() == owner ||
+            getApproved(tokenId) == _msgSender() ||
+            isApprovedForAll(owner, _msgSender()),
+            "Not token owner or approved"
+        );
+        _burn(tokenId);
+    }
+
+    // View functions
+    function getMintFee() public view onlyInitialized returns (uint256) {
+        return mintFee;
+    }
+
+    function getMaxSupply() public view onlyInitialized returns (uint256) {
+        return maxSupply;
+    }
+
+    function getMintStartTime() public view onlyInitialized returns (uint256) {
+        return mintStartTime;
+    }
+
+    function getCreatorFee() public view onlyInitialized returns (uint256) {
+        return creatorFee;
+    }
+
+    function getBaseURI() public view onlyInitialized returns (string memory) {
+        return _baseURIValue;
+    }
+
+    function getBaseExtension() public view onlyInitialized returns (string memory) {
+        return baseExtension;
+    }
+
+    function royaltyInfo(uint256 /* _tokenId */, uint256 _salePrice)
+        external
+        view
+        override
+        onlyInitialized
+        returns (address receiver, uint256 royaltyAmount)
+    {
+        receiver = creator;
+        royaltyAmount = (_salePrice * creatorFee) / 10000;
+    }
+
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721, IERC165) returns (bool) {
+        return interfaceId == type(IERC2981).interfaceId || super.supportsInterface(interfaceId);
+    }
+
+    receive() external payable {}
+}
+</code></pre>
+        </div>
+      </div>
+    
+      </div>
+    </div>
+  
+        
+        
+    <div class="social-links">
+      <a href="https://www.worldnftmarketplace.com/" target="_blank" rel="noopener noreferrer" class="social-link website">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="social-icon"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+      Website
+    </a>
+    </div>
+  
+        
+        
+<section class="scope-of-work-section">
+  <h2>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="section-icon"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+    Scope of Work
+  </h2>
+  <div class="scope-of-work-content">
+    <p>This security audit covered the following areas:</p>
+    
+    <ul>
+      <li><strong>Code Review:</strong> A comprehensive review of the provided source code to identify security vulnerabilities, logic errors, and potential exploits.</li>
+      
+      <li><strong>Architecture Analysis:</strong> Evaluation of the overall system architecture, focusing on security implications and potential weaknesses.</li>
+      
+      <li><strong>Best Practices:</strong> Assessment of adherence to industry best practices and coding standards.</li>
+      
+      <li><strong>Gas Optimization:</strong> For smart contracts, analysis of gas usage and recommendations for optimization.</li>
+      
+      <li><strong>Testing Coverage:</strong> Review of the test suite to ensure adequate coverage of critical functionality.</li>
+    </ul>
+    
+    <p><strong>Files Analyzed:</strong> The audit covered 1 files, including all source code provided for review.</p>
+    
+    <p><strong>Audit Period:</strong> This audit was conducted on 5/4/2025.</p>
+  </div>
+</section>
+
+        
+        
+<section class="revision-notes-section">
+          <h2>
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="section-icon">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            Revision Notes
+          </h2>
+          <div class="revision-notes-content">
+            This is an implementation contract meant to be cloned.
+          </div>
+        </section><section class="disclaimer-section">
+  <h2>
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokewidth="2" strokelinecap="round" strokelinejoin="round" class="section-icon"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+    Disclaimer
+  </h2>
+  <div class="disclaimer-content">
+    <p>This audit report is provided on an "as is" basis and is subject to the following limitations and disclaimers:</p>
+    
+    <ul>
+      <li><strong>Scope Limitations:</strong> This security audit is limited to the code and documentation provided to us at the time of the audit. Any subsequent changes to the codebase are not covered by this report.</li>
+      
+      <li><strong>No Guarantee of Complete Security:</strong> While we have made every effort to identify vulnerabilities and security issues, no audit can guarantee the complete absence of security vulnerabilities. New attack vectors and techniques may emerge after the audit is completed.</li>
+      
+      <li><strong>Smart Contract Risks:</strong> Smart contracts are subject to various risks, including but not limited to bugs, vulnerabilities, and exploits. Users should exercise caution and conduct their own due diligence before interacting with any smart contract.</li>
+      
+      <li><strong>Deployment Verification:</strong> This audit does not verify the correct deployment of the audited contracts. Users should independently verify that the deployed contract code matches the audited code before interacting with it.</li>
+      
+      <li><strong>No Investment Advice:</strong> This audit report does not constitute investment advice, an endorsement of the project, or a guarantee of the project's success or security.</li>
+    </ul>
+    
+    <p><strong>Verification of Deployed Addresses:</strong> Users should always verify that they are interacting with the correct contract addresses by checking official project documentation and communication channels. The contract addresses should be verified on the blockchain explorer to ensure they match the audited code.</p>
+    
+  </div>
+</section>
+
+      </main>
+      
+      <footer class="footer">
+        <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/logo%20%282%29-zuWTBfp90yv1KCPqRFHeJ7tTDlgsAC.png" alt="MetaLabz Logo" class="footer-logo">
+        <p>© 2025 MetaLabz | MLZ Audit Suite</p>
+      </footer>
+    </div>
+  
+  
+</body></html>
